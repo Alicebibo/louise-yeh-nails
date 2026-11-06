@@ -76,7 +76,7 @@ h1 small{display:block;font-style:normal;font-family:"Noto Serif TC",serif;font-
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden;cursor:pointer;transition:.3s;box-shadow:0 1px 0 rgba(0,0,0,.02)}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.card .ph{aspect-ratio:1/1;overflow:hidden;background:var(--pearl)}
+.card .ph{aspect-ratio:4/5;overflow:hidden;background:var(--pearl)}
 .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .card:hover .ph img{transform:scale(1.05)}
 .card .body{padding:20px 22px 22px}
@@ -250,6 +250,35 @@ h1 small{animation:sub-in 1s ease 1s both}
 }
 .lb-hint{display:none;color:#cdb3b8;font-size:11px;margin-top:4px}
 
+
+/* 分類切換：美甲／飾品創作（手機時貼齊畫面上方） */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0 0;padding:6px;border-radius:999px;background:rgba(255,250,248,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);box-shadow:0 10px 30px -18px rgba(110,60,70,.5)}
+.tab{position:relative;z-index:1;display:flex;align-items:baseline;justify-content:center;gap:8px;min-height:48px;padding:10px 14px;border:0;border-radius:999px;background:transparent;font:inherit;color:var(--muted);cursor:pointer;transition:color .3s}
+.tab .t-zh{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px;letter-spacing:.08em}
+.tab .t-en{font-family:"Bodoni Moda",serif;font-style:italic;font-size:15px}
+.tab .t-n{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--rose-soft);color:var(--rose-deep)}
+.tab[aria-selected="true"]{color:#fff}
+.tab[aria-selected="true"] .t-n{background:rgba(255,255,255,.25);color:#fff}
+.tab:focus-visible{outline:2px solid var(--rose-deep);outline-offset:2px}
+.tab-ink{position:absolute;z-index:0;top:6px;bottom:6px;left:6px;width:calc(50% - 9px);border-radius:999px;background:linear-gradient(120deg,var(--rose-deep),#c98a95 60%,#d9a3b4);box-shadow:0 8px 20px -10px rgba(163,96,109,.8);transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
+.tabs[data-cat="accessories"] .tab-ink{transform:translateX(calc(100% + 6px))}
+#panel{transition:opacity .35s ease,transform .35s ease}
+#panel.switching{opacity:0;transform:translateY(12px)}
+#panel .meta{margin-top:22px}
+.empty-acc{grid-column:1/-1;display:grid;place-items:center;text-align:center;gap:10px;padding:56px 20px;border:1px dashed #e2c9cc;border-radius:18px;background:rgba(255,250,248,.7);color:var(--muted)}
+.empty-acc .gem{width:64px;height:64px;border-radius:50%;background:conic-gradient(from 30deg,#ffd3df,#f4a9c0,#dcc4f3,#bfe1f3,#fff0d4,#ffd3df);box-shadow:inset 0 0 0 6px rgba(255,255,255,.65),0 10px 24px -10px rgba(163,96,109,.6);animation:disc 8s linear infinite}
+.empty-acc b{font-family:"Noto Serif TC",serif;font-size:19px;color:var(--ink)}
+.empty-acc p{font-size:14px;max-width:26em}
+@media (max-width:600px){
+  .tabs{margin:4px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;border-radius:0 0 20px 20px;border-left:0;border-right:0;border-top:0}
+  .tab{flex-direction:column;align-items:center;gap:0;min-height:52px;padding:6px}
+  .tab .t-zh{font-size:16px}
+  .tab .t-en{font-size:12px}
+  .tab .t-n{position:absolute;top:6px;right:12px;font-size:10px}
+  #panel .meta{margin-top:16px}
+}
+@media (prefers-reduced-motion:reduce){.tab-ink,#panel{transition:none}.empty-acc .gem{animation:none}}
+
 /* 背景音樂按鈕 */
 .music{position:fixed;z-index:40;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,250,248,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px -12px rgba(110,60,70,.45);cursor:pointer;font:inherit;color:var(--ink);text-align:left;transition:transform .25s}
 .music:hover{transform:translateY(-2px)}
@@ -292,23 +321,36 @@ h1 small{animation:sub-in 1s ease 1s both}
 <div class="wrap">
   <header class="reveal">
     <div class="hero-orb" aria-hidden="true"><div class="glow"></div><div class="holo" id="morph"></div></div>
-    <div class="eyebrow mono">手作美甲 · NAIL ATELIER</div>
-    <h1>Louise Yeh<small>美甲作品集</small></h1>
-    <p class="lead">把喜歡的顏色、圖案與小心意，一片一片畫進指尖。每一組都是用心手作的美甲，新作品會陸續加入，歡迎常回來看看。</p>
+    <div class="eyebrow mono">手作美甲 · 飾品 · ATELIER</div>
+    <h1>Louise Yeh<small>美甲 &amp; 飾品創作</small></h1>
+    <p class="lead">把喜歡的顏色、圖案與小心意，做成指尖上的美甲，也做成戴在身上的飾品。每一件都是手作，新作品會陸續加入，歡迎常回來看看。</p>
+  </header>
+
+  <nav class="tabs reveal" id="tabs" role="tablist" aria-label="作品分類">
+    <button class="tab" role="tab" id="tab-nails" data-cat="nails" aria-controls="panel">
+      <span class="t-zh">美甲</span><span class="t-en">Nail Art</span><span class="t-n" id="n-nails"></span>
+    </button>
+    <button class="tab" role="tab" id="tab-accessories" data-cat="accessories" aria-controls="panel">
+      <span class="t-zh">飾品創作</span><span class="t-en">Accessories</span><span class="t-n" id="n-accessories"></span>
+    </button>
+    <span class="tab-ink" aria-hidden="true"></span>
+  </nav>
+
+  <div id="panel" role="tabpanel">
     <div class="meta">
       <div><span class="mono">Works</span><span id="m-count"></span></div>
       <div><span class="mono">Style</span><span id="m-style"></span></div>
     </div>
     <nav class="strip" id="strip"></nav>
-  </header>
 
   <section class="featured reveal" id="featured"></section>
 
   <div class="sec-head reveal">
-    <h3>更多作品</h3>
+    <h3 id="more-title">更多作品</h3>
     <span class="mono">More works · newest first</span>
   </div>
   <section class="grid" id="grid"></section>
+  </div>
 
   <footer>
     <span>© 2026 Louise Yeh · 作品版權屬創作者所有</span>
@@ -332,8 +374,8 @@ h1 small{animation:sub-in 1s ease 1s both}
 </div>
 
 <script>
-// 新增作品：照片放進 works/，在陣列最後加一筆即可（自動以最新一件當主打）
-const WORKS = [
+// 作品分兩類：美甲 NAILS、飾品創作 ACCESSORIES。新增作品：照片放進 works/，在對應陣列最後加一筆（各分類自動以最新一件當主打）
+const NAILS = [
   { no: "01", file: "works/fj-01.jpg?v=20261106e", title: "紅梅賀春", en: "Plum Blossom New Year",
     media: "凝膠美甲 · Gel nails", style: "節慶",
     desc: "以正紅亮面當主角，搭配一朵立體白梅與金色葉片飾品，拇指刷上細緻金蔥。紅、白、金三色喜氣又不俗氣，很適合新年時節。",
@@ -363,68 +405,116 @@ const WORKS = [
     desc: "裸粉透膚的底色像一層薄紗，每一指放上不同的金箔、貝殼片與碎鑽，乾淨又有細節。上班、約會都很適合的百搭款。",
     details: ["裸粉透膚", "金箔", "貝殼片", "碎鑽"] }
 ];
+const ACCESSORIES = [
+  { no: "01", file: "works/acc-01.jpg?v=20261106e", title: "金幣彩晶雙層鍊", en: "Golden Coin Layers",
+    media: "手作項鍊 · Handmade necklace", style: "金屬鍊",
+    desc: "兩層長短不同的金色鏈條，中間垂著一枚復古金幣，鏈上隨意點綴黃、藍、紅、墨綠的切面彩晶。可以單獨戴，也很適合疊搭毛衣或素色上衣。",
+    details: ["雙層金鍊", "復古金幣", "切面彩晶", "可疊搭"] },
+  { no: "02", file: "works/acc-02.jpg?v=20261106e", title: "珍珠星星古銅鍊", en: "Pearl & Star Charm",
+    media: "手作項鍊 · Handmade necklace", style: "復古古銅",
+    desc: "古銅色麻花鏈掛滿奶油色珍珠與網紋圓片，中央綴一枚綠色玉石環，下方再吊一顆小星星。復古又帶點俏皮，是很有存在感的主角項鍊。",
+    details: ["古銅麻花鏈", "奶油珍珠", "綠玉石環", "星星吊飾"] }
+];
+const CATS = {
+  nails:       { list: NAILS,       unit: '件', more: '更多美甲',     empty: '更多美甲作品製作中，敬請期待 ✿' },
+  accessories: { list: ACCESSORIES, unit: '件', more: '更多飾品創作', empty: '更多飾品作品製作中，敬請期待 ✿' }
+};
 
 const $ = s => document.querySelector(s);
-const sorted = [...WORKS].sort((a,b) => b.no.localeCompare(a.no));
-const latest = sorted[0];
+let cat = location.hash === '#accessories' ? 'accessories' : 'nails';
+let sorted = [], latest = null;
+$('#n-nails').textContent = NAILS.length;
+$('#n-accessories').textContent = ACCESSORIES.length;
 
-$('#m-count').textContent = WORKS.length + ' 件';
-$('#m-style').textContent = [...new Set(WORKS.map(w => w.style))].join('、');
+function render(){
+  const C = CATS[cat];
+  sorted = [...C.list].sort((a, b) => b.no.localeCompare(a.no));
+  latest = sorted[0];
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.cat === cat));
+  $('#tabs').dataset.cat = cat;
+  $('#panel').setAttribute('aria-labelledby', 'tab-' + cat);
+  $('#m-count').textContent = C.list.length + ' ' + C.unit;
+  $('#m-style').textContent = [...new Set(C.list.map(w => w.style))].join('、');
+  $('#more-title').textContent = C.more;
 
-$('#strip').innerHTML = sorted.map(w => `
-  <a class="chip" data-no="${w.no}">
-    <img src="${w.file}" alt="">
-    <span><span class="mono">No.${w.no}${w === latest ? '<span class="tag">NEW</span>' : ''}</span>${w.title}</span>
-  </a>`).join('');
-
-$('#featured').innerHTML = `
-  <div class="feat-img" id="feat-img">
-    <img src="${latest.file}" alt="${latest.title}">
-    <div class="loupe" id="loupe"></div>
-    <span class="hint mono">移動滑鼠看細節</span>
-  </div>
-  <div class="feat-text">
-    <span class="badge">最新作品 · LATEST</span>
-    <h2>${latest.title}</h2>
-    <div class="en">${latest.en}</div>
-    <div class="info">
-      <span class="mono">No.${latest.no} · Louise Yeh</span>
-      <span>${latest.media}</span>
+  if (!latest) {
+    $('#strip').innerHTML = '';
+    $('#featured').innerHTML = '<div class="empty-acc"><span class="gem"></span><b>作品整理中</b><p>新作品正在拍攝整理，很快就會放上來。</p></div>';
+    $('#grid').innerHTML = '';
+    return;
+  }
+  $('#strip').innerHTML = sorted.map(w => `
+    <a class="chip" data-no="${w.no}">
+      <img src="${w.file}" alt="">
+      <span><span class="mono">No.${w.no}${w === latest ? '<span class="tag">NEW</span>' : ''}</span>${w.title}</span>
+    </a>`).join('');
+  $('#featured').innerHTML = `
+    <div class="feat-img" id="feat-img">
+      <img src="${latest.file}" alt="${latest.title}">
+      <div class="loupe" id="loupe"></div>
+      <span class="hint mono">移動滑鼠看細節</span>
     </div>
-    <p class="desc">${latest.desc}</p>
-    <div class="details">${latest.details.map(d => `<span>${d}</span>`).join('')}</div>
-    <div class="btns"><button class="btn" data-open="${latest.no}">放大欣賞</button></div>
-  </div>`;
+    <div class="feat-text">
+      <span class="badge">最新作品 · LATEST</span>
+      <h2>${latest.title}</h2>
+      <div class="en">${latest.en}</div>
+      <div class="info">
+        <span class="mono">No.${latest.no} · Louise Yeh</span>
+        <span>${latest.media}</span>
+      </div>
+      <p class="desc">${latest.desc}</p>
+      <div class="details">${latest.details.map(d => `<span>${d}</span>`).join('')}</div>
+      <div class="btns"><button class="btn" data-open="${latest.no}">放大欣賞</button></div>
+    </div>`;
+  const rest = sorted.slice(1);
+  $('#grid').innerHTML = rest.length ? rest.map((w, i) => `
+    <article class="card reveal in" data-open="${w.no}" style="--i:${i % 3}">
+      <div class="ph"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>
+      <div class="body">
+        <div class="top"><span class="mono">No.${w.no}</span><span class="mono">Louise Yeh</span></div>
+        <h4>${w.title}</h4>
+        <div class="en">${w.en}</div>
+        <div class="sub">${w.media}</div>
+      </div>
+    </article>`).join('') : `<div class="empty">${C.empty}</div>`;
+  bindLoupe();
+  bindTilt();
+}
 
-const rest = sorted.slice(1);
-$('#grid').innerHTML = rest.length ? rest.map(w => `
-  <article class="card reveal" data-open="${w.no}">
-    <div class="ph"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>
-    <div class="body">
-      <div class="top"><span class="mono">No.${w.no}</span><span class="mono">Louise Yeh</span></div>
-      <h4>${w.title}</h4>
-      <div class="en">${w.en}</div>
-      <div class="sub">${w.media}</div>
-    </div>
-  </article>`).join('') : '<div class="empty">更多作品製作中，敬請期待 ✿</div>';
+// 切換分類：淡出 → 換內容 → 淡入，並記在網址 #nails / #accessories
+function switchTo(next){
+  if (next === cat) return;
+  const panel = $('#panel');
+  panel.classList.add('switching');
+  setTimeout(() => {
+    cat = next; render();
+    try { history.replaceState(null, '', '#' + cat); } catch (e) {}
+    requestAnimationFrame(() => panel.classList.remove('switching'));
+  }, 220);
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTo(t.dataset.cat)));
+addEventListener('hashchange', () => switchTo(location.hash === '#accessories' ? 'accessories' : 'nails'));
 
-// 放大鏡
-const fi = $('#feat-img'), loupe = $('#loupe'), fimg = fi.querySelector('img');
+// 放大鏡（每次換分類重新綁定）
 const Z = 2.6;
-fi.addEventListener('mousemove', e => {
-  const r = fimg.getBoundingClientRect(), fr = fi.getBoundingClientRect();
-  const x = e.clientX - r.left, y = e.clientY - r.top;
-  if (x < 0 || y < 0 || x > r.width || y > r.height) { loupe.style.opacity = 0; return; }
-  loupe.style.opacity = '';
-  loupe.style.left = (e.clientX - fr.left - 85) + 'px';
-  loupe.style.top = (e.clientY - fr.top - 85) + 'px';
-  loupe.style.backgroundImage = `url("${fimg.src}")`;
-  loupe.style.backgroundSize = `${r.width * Z}px ${r.height * Z}px`;
-  loupe.style.backgroundPosition = `${85 - x * Z}px ${85 - y * Z}px`;
-});
-fi.addEventListener('click', () => openLb(latest.no));
+function bindLoupe(){
+  const fi = $('#feat-img'); if (!fi) return;
+  const loupe = $('#loupe'), fimg = fi.querySelector('img');
+  fi.addEventListener('mousemove', e => {
+    const r = fimg.getBoundingClientRect(), fr = fi.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    if (x < 0 || y < 0 || x > r.width || y > r.height) { loupe.style.opacity = 0; return; }
+    loupe.style.opacity = '';
+    loupe.style.left = (e.clientX - fr.left - 85) + 'px';
+    loupe.style.top = (e.clientY - fr.top - 85) + 'px';
+    loupe.style.backgroundImage = `url("${fimg.src}")`;
+    loupe.style.backgroundSize = `${r.width * Z}px ${r.height * Z}px`;
+    loupe.style.backgroundPosition = `${85 - x * Z}px ${85 - y * Z}px`;
+  });
+  fi.addEventListener('click', () => openLb(latest.no));
+}
 
-// 燈箱
+// 燈箱（只在目前分類內切換）
 const lb = $('#lb'), stage = $('#lb-stage'), lbImg = $('#lb-img');
 let idx = 0;
 function show(i){
@@ -549,18 +639,20 @@ h1.insertBefore(document.createRange().createContextualFragment(
 ), nameText);
 nameText.remove();
 document.querySelectorAll('.chip').forEach((c, i) => c.style.setProperty('--i', i));
-document.querySelectorAll('.card').forEach((c, i) => c.style.setProperty('--i', i % 3));
 
-// 卡片滑鼠 3D 傾斜
-if (!reduce) document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--ry', ((e.clientX - r.left) / r.width - .5) * 14 + 'deg');
-    card.style.setProperty('--rx', -((e.clientY - r.top) / r.height - .5) * 14 + 'deg');
-    card.classList.add('tilt');
+// 卡片滑鼠 3D 傾斜（每次換分類重新綁定）
+function bindTilt(){
+  if (reduce) return;
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--ry', ((e.clientX - r.left) / r.width - .5) * 14 + 'deg');
+      card.style.setProperty('--rx', -((e.clientY - r.top) / r.height - .5) * 14 + 'deg');
+      card.classList.add('tilt');
+    });
+    card.addEventListener('mouseleave', () => card.classList.remove('tilt'));
   });
-  card.addEventListener('mouseleave', () => card.classList.remove('tilt'));
-});
+}
 
 // 閃亮粒子：四角星芒緩緩飄升、閃爍；滑鼠移動時灑出亮粉
 const cv = $('#sparkle'), ctx = cv.getContext('2d');
@@ -654,6 +746,7 @@ playMusic();
 // 進場動畫
 const io =new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), {threshold:.12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+render();
 </script>
 </body>
 </html>
