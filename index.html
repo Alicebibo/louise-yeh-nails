@@ -40,15 +40,16 @@ header{padding:72px 0 36px}
 .brand-logo::before{display:none;content:"";position:absolute;left:-60px;top:-40px;width:440px;height:440px;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(253,248,238,.95),rgba(253,248,238,.75) 60%,rgba(253,248,238,0));pointer-events:none}
 .brand-logo img{height:300px;width:auto;max-width:100%;animation:mark-in 1.2s cubic-bezier(.2,1.1,.4,1) both}
 /* 頁首：左邊 logo、右邊一張霧面卡片放副標＋分隔飾紋＋介紹文字 */
-.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:56px;align-items:center;margin-bottom:10px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:48px;align-items:center;margin-bottom:14px}
+.hero .brand-logo{justify-self:center;align-items:center}
 .hero .brand-logo{margin:0}
-.hero-side{position:relative;z-index:2;max-width:540px;padding:34px 38px 32px;border-radius:26px;background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:0 24px 50px -34px rgba(88,76,66,.45);animation:sub-in 1s ease .5s both}
+.hero-side{position:relative;z-index:2;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 44px;border-radius:26px;background:rgba(255,255,255,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:0 24px 50px -34px rgba(88,76,66,.45);animation:sub-in 1s ease .5s both}
 .hero-side::before,.hero-side::after{content:"";position:absolute;width:22px;height:22px;border-color:var(--rose);border-style:solid;opacity:.75}
 .hero-side::before{left:12px;top:12px;border-width:1px 0 0 1px;border-radius:8px 0 0 0}
 .hero-side::after{right:12px;bottom:12px;border-width:0 1px 1px 0;border-radius:0 0 8px 0}
-.sub{font-family:"Noto Serif TC",serif;font-weight:500;font-size:clamp(19px,2.2vw,24px);letter-spacing:.42em;color:var(--rose-deep)}
+.sub{font-family:"Noto Serif TC",serif;font-weight:500;font-size:clamp(19px,2.2vw,24px);letter-spacing:.42em;padding-left:.42em;color:var(--rose-deep)}
 .sub span{font-family:"Bodoni Moda",serif;font-style:italic;letter-spacing:0;margin:0 .25em;color:var(--rose)}
-.orn{display:flex;align-items:center;gap:10px;margin:18px 0 20px;max-width:300px}
+.orn{display:flex;align-items:center;gap:10px;margin:20px auto 22px;width:min(320px,80%)}
 .orn i{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rose))}
 .orn i:last-child{background:linear-gradient(90deg,var(--rose),transparent)}
 .orn b{width:8px;height:8px;transform:rotate(45deg);border:1px solid var(--rose);background:var(--paper);box-shadow:0 0 0 3px var(--paper)}
@@ -217,7 +218,7 @@ h1 small{animation:sub-in 1s ease 1s both}
 /* ===== RWD：手機（主要版面） ===== */
 @media (max-width:760px){
   .hero{grid-template-columns:minmax(0,1fr);justify-items:center;gap:22px;text-align:center}
-  .hero-side{padding:26px 22px 24px;width:100%}
+  .hero-side{padding:26px 22px 24px;width:100%;min-height:0}
   .orn{margin:14px auto 16px;max-width:220px}
   .hero-side .lead br{display:none}
   .hero-side .lead{font-size:14px;line-height:1.9}
