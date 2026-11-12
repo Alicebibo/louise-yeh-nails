@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Louise Yeh 美甲片與飾品創作</title>
-<meta name="description" content="Louise Yeh 手作美甲片與飾品創作，手繪、暈染、金箔水鑽穿戴甲與手作項鍊，新作陸續加入。">
+<title>LuLu’s Handmade 手作美甲片與飾品</title>
+<meta name="description" content="LuLu’s Handmade 手作美甲片與飾品創作，手繪、暈染、金箔水鑽穿戴甲與手作項鍊，新作陸續加入。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Louise Yeh 美甲片 & 飾品創作">
+<meta property="og:title" content="LuLu’s Handmade｜手作美甲片 & 飾品">
 <meta property="og:description" content="把喜歡的顏色、圖案與小心意，一筆一筆畫進指尖，一顆一顆串成飾品。">
 <meta property="og:url" content="https://alicebibo.github.io/louise-yeh-nails/">
 <meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-image.jpg?v=20261109a">
@@ -146,6 +146,7 @@ header{position:relative}
 @keyframes feat-sheen{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
 
 /* 標題逐字落下 */
+h1 .word{display:inline-block;white-space:nowrap}
 h1 .ch{display:inline-block;transform-origin:50% 100%;animation:ch-in .9s cubic-bezier(.2,1.4,.4,1) both;animation-delay:calc(var(--i) * 70ms + .15s)}
 h1 .ch:hover{animation:ch-bounce .6s ease}
 @keyframes ch-in{from{opacity:0;transform:translateY(-60px) rotate(-12deg) scale(.6)}to{opacity:1;transform:none}}
@@ -195,7 +196,7 @@ h1 small{animation:sub-in 1s ease 1s both}
   .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   header{padding-top:36px;padding-bottom:18px}
   .eyebrow{font-size:10px}
-  h1{font-size:clamp(50px,16vw,72px);margin:14px 0 4px}
+  h1{font-size:clamp(46px,14vw,66px);margin:14px 0 4px}
   h1 small{font-size:17px;letter-spacing:.3em;margin-top:10px}
   .hero-orb{width:100px;top:26px;right:14px;opacity:.8}
   .hero-orb .glow{inset:-8%}
@@ -322,7 +323,7 @@ h1 small{animation:sub-in 1s ease 1s both}
   <header class="reveal">
     <div class="hero-orb" aria-hidden="true"><div class="glow"></div><div class="holo" id="morph"></div></div>
     <div class="eyebrow mono">手作美甲片 · 飾品 · ATELIER</div>
-    <h1>Louise Yeh<small>美甲片 &amp; 飾品創作</small></h1>
+    <h1>LuLu’s Handmade<small>美甲片 &amp; 飾品創作</small></h1>
     <p class="lead">把喜歡的顏色、圖案與小心意，一筆一筆畫進指尖，一顆一顆串成飾品。每一件都是手作，新作品會陸續加入，歡迎常回來看看。</p>
   </header>
 
@@ -353,7 +354,7 @@ h1 small{animation:sub-in 1s ease 1s both}
   </div>
 
   <footer>
-    <span>© 2026 Louise Yeh · 作品版權屬創作者所有</span>
+    <span>© 2026 LuLu’s Handmade · 作品版權屬創作者所有</span>
     <span>點選作品可放大欣賞細節</span>
   </footer>
 </div>
@@ -459,7 +460,7 @@ function render(){
       <h2>${latest.title}</h2>
       <div class="en">${latest.en}</div>
       <div class="info">
-        <span class="mono">No.${latest.no} · Louise Yeh</span>
+        <span class="mono">No.${latest.no} · LuLu’s Handmade</span>
         <span>${latest.media}</span>
       </div>
       <p class="desc">${latest.desc}</p>
@@ -471,7 +472,7 @@ function render(){
     <article class="card reveal in" data-open="${w.no}" style="--i:${i % 3}">
       <div class="ph"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>
       <div class="body">
-        <div class="top"><span class="mono">No.${w.no}</span><span class="mono">Louise Yeh</span></div>
+        <div class="top"><span class="mono">No.${w.no}</span><span class="mono">LuLu’s Handmade</span></div>
         <h4>${w.title}</h4>
         <div class="en">${w.en}</div>
         <div class="sub">${w.media}</div>
@@ -635,7 +636,8 @@ if (!reduce) {
 // 標題拆成單字逐一落下
 const h1 = $('h1'), nameText = h1.firstChild;
 h1.insertBefore(document.createRange().createContextualFragment(
-  [...nameText.textContent].map((c, i) => c === ' ' ? ' ' : `<span class="ch" style="--i:${i}">${c}</span>`).join('')
+  // 每個英文字包成一組，換行只會發生在字與字之間
+  (() => { let i = 0; return nameText.textContent.split(' ').map(w => `<span class="word">${[...w].map(c => `<span class="ch" style="--i:${i++}">${c}</span>`).join('')}</span>`).join(' '); })()
 ), nameText);
 nameText.remove();
 document.querySelectorAll('.chip').forEach((c, i) => c.style.setProperty('--i', i));
