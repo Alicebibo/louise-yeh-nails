@@ -36,7 +36,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
 
 /* header */
 header{padding:72px 0 36px}
-.brandrow{display:flex;align-items:center;gap:18px}
+.brand-logo{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:0 0 6px;position:relative;z-index:2}
+.brand-logo::before{content:"";position:absolute;left:-60px;top:-40px;width:440px;height:440px;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(253,248,238,.95),rgba(253,248,238,.75) 60%,rgba(253,248,238,0));pointer-events:none}
+.brand-logo img{height:300px;width:auto;max-width:100%;animation:mark-in 1.2s cubic-bezier(.2,1.1,.4,1) both;filter:drop-shadow(0 8px 14px rgba(150,110,60,.15))}
+.brand-logo small{margin-top:6px}
 .mark{height:138px;width:auto;flex:none;position:relative;z-index:2;padding:12px 18px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(255,250,242,.96) 52%,rgba(255,250,242,0) 71%);filter:drop-shadow(0 8px 14px rgba(150,110,60,.2));animation:mark-in 1.1s cubic-bezier(.2,1.2,.4,1) both}
 @keyframes mark-in{from{opacity:0;transform:translateY(-14px) scale(.85)}to{opacity:1;transform:none}}
 .foot-mark{height:44px;width:auto;vertical-align:middle;margin-right:10px;opacity:.9}
@@ -183,7 +186,7 @@ h1 small{animation:sub-in 1s ease 1s both}
 #sparkle{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
-  .mark{animation:none}
+  .brand-logo img{animation:none}
   .shp,.holo,.holo::after,.hero-orb .glow,.feat-img::after,h1 .ch,h1 small,.chip,.tag,.feat-img img,.btn::after{animation:none}
   #sparkle{display:none}
 }
@@ -203,7 +206,8 @@ h1 small{animation:sub-in 1s ease 1s both}
   .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   header{padding-top:36px;padding-bottom:18px}
   .eyebrow{font-size:10px}
-  .mark{height:96px;padding:8px 12px}
+  .brand-logo img{height:220px}
+  .brand-logo::before{width:320px;height:320px;left:-40px;top:-30px}
   .brandrow{gap:12px}
   h1{font-size:clamp(46px,14vw,66px);margin:14px 0 4px}
   h1 small{font-size:17px;letter-spacing:.3em;margin-top:10px}
@@ -331,8 +335,7 @@ h1 small{animation:sub-in 1s ease 1s both}
 <div class="wrap">
   <header class="reveal">
     <div class="hero-orb" aria-hidden="true"><div class="glow"></div><div class="holo" id="morph"></div></div>
-    <div class="brandrow"><img class="mark" src="logo/emblem.png?v=20261112a" alt="LuLu’s Handmade 標誌"><div class="eyebrow mono">手作美甲片 · 飾品 · ATELIER</div></div>
-    <h1>LuLu’s Handmade<small>美甲片 &amp; 飾品創作</small></h1>
+    <h1 class="brand-logo"><img src="logo/main.png?v=20261112b" alt="LuLu’s Handmade"><small>美甲片 &amp; 飾品創作</small></h1>
     <p class="lead">把喜歡的顏色、圖案與小心意，一筆一筆畫進指尖，一顆一顆串成飾品。每一件都是手作，新作品會陸續加入，歡迎常回來看看。</p>
   </header>
 
@@ -578,7 +581,7 @@ document.addEventListener('keydown', e => {
 
 // 漂浮形狀：x/y 位置、s 尺寸、depth 越大捲動視差越明顯
 const SHAPES = [
-  {f:'nail',   x:'3%',  y:'10%', s:140, depth:.25},
+  {f:'nail',   x:'60%', y:'8%',  s:120, depth:.25},
   {f:'circle', x:'84%', y:'6%',  s:70,  depth:.5},
   {f:'hex',    x:'90%', y:'44%', s:170, depth:.18},
   {f:'flower', x:'1%',  y:'55%', s:110, depth:.4},
@@ -586,9 +589,9 @@ const SHAPES = [
   {f:'tri',    x:'9%',  y:'86%', s:85,  depth:.55},
   {f:'circle', x:'46%', y:'92%', s:44,  depth:.7},
   {f:'nail',   x:'94%', y:'22%', s:62,  depth:.6},
-  {f:'circle', x:'30%', y:'3%',  s:32,  depth:.8},
+  {f:'circle', x:'48%', y:'3%',  s:32,  depth:.8},
   {f:'flower', x:'62%', y:'60%', s:52,  depth:.65},
-  {f:'hex',    x:'20%', y:'40%', s:40,  depth:.75},
+  {f:'hex',    x:'40%', y:'48%', s:40,  depth:.75},
   {f:'nail',   x:'55%', y:'20%', s:36,  depth:.85}
 ];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -644,11 +647,10 @@ if (!reduce) {
 
 // 標題拆成單字逐一落下
 const h1 = $('h1'), nameText = h1.firstChild;
-h1.insertBefore(document.createRange().createContextualFragment(
+if (nameText && nameText.nodeType === 3 && nameText.textContent.trim()) h1.insertBefore(document.createRange().createContextualFragment(
   // 每個英文字包成一組，換行只會發生在字與字之間
   (() => { let i = 0; return nameText.textContent.split(' ').map(w => `<span class="word">${[...w].map(c => `<span class="ch" style="--i:${i++}">${c}</span>`).join('')}</span>`).join(' '); })()
-), nameText);
-nameText.remove();
+), nameText), nameText.remove();
 document.querySelectorAll('.chip').forEach((c, i) => c.style.setProperty('--i', i));
 
 // 卡片滑鼠 3D 傾斜（每次換分類重新綁定）
