@@ -73,6 +73,26 @@ h1 small{display:block;font-style:normal;font-family:"Noto Serif TC",serif;font-
 .chip .mono{font-size:9.5px;letter-spacing:.12em;display:block;line-height:1.2}
 .tag{display:inline-block;background:var(--rose);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:1px}
 
+
+/* 飾品子分類：全部／項鍊／耳環… */
+.subs{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:22px}
+.subs[hidden]{display:none}
+.subs .lbl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--muted);margin-right:6px}
+.sub-btn{font:inherit;display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:#534a42;cursor:pointer;transition:.25s;font-size:14px;letter-spacing:.06em}
+.sub-btn .en{font-size:13px;margin:0;color:var(--muted)}
+.sub-btn b{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:10.5px;padding:0 6px;border-radius:999px;background:var(--rose-soft);color:var(--rose-deep)}
+.sub-btn:hover{border-color:var(--rose);transform:translateY(-1px)}
+.sub-btn[aria-pressed="true"]{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
+.sub-btn[aria-pressed="true"] .en{color:rgba(255,255,255,.75)}
+.sub-btn[aria-pressed="true"] b{background:rgba(255,255,255,.22);color:#fff}
+@media (max-width:600px){
+  .subs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:16px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:2px max(16px,env(safe-area-inset-left,0px)) 4px}
+  .subs::-webkit-scrollbar{display:none}
+  .subs .lbl{display:none}
+  .sub-btn{flex:none;padding:7px 15px;font-size:14px}
+  .sub-btn .en{display:none}
+}
+
 /* featured */
 .featured{margin-top:56px;background:var(--paper);border:1px solid var(--line);border-radius:4px;display:grid;grid-template-columns:1.25fr 1fr;box-shadow:var(--shadow);overflow:hidden}
 .feat-img{position:relative;background:var(--pearl);padding:38px;display:flex;align-items:center;justify-content:center;cursor:zoom-in;overflow:hidden}
@@ -397,6 +417,7 @@ h1 small{animation:sub-in 1s ease 1s both}
       <div><span class="mono">Works</span><span id="m-count"></span></div>
       <div><span class="mono">Style</span><span id="m-style"></span></div>
     </div>
+    <nav class="subs" id="subs" aria-label="飾品分類"></nav>
     <nav class="strip" id="strip"></nav>
 
   <section class="featured reveal" id="featured"></section>
@@ -462,23 +483,23 @@ const NAILS = [
     details: ["裸粉透膚", "金箔", "貝殼片", "碎鑽"] }
 ];
 const ACCESSORIES = [
-  { no: "01", file: "works/acc-01.jpg?v=20261106f", title: "金幣彩晶雙層鍊", en: "Golden Coin Layers",
+  { no: "01", type: "necklace", file: "works/acc-01.jpg?v=20261106f", title: "金幣彩晶雙層鍊", en: "Golden Coin Layers",
     media: "手作項鍊 · Handmade necklace", style: "金屬鍊",
     desc: "兩層長短不同的金色鏈條，中間垂著一枚復古金幣，鏈上隨意點綴黃、藍、紅、墨綠的切面彩晶。可以單獨戴，也很適合疊搭毛衣或素色上衣。",
     details: ["雙層金鍊", "復古金幣", "切面彩晶", "可疊搭"] },
-  { no: "02", file: "works/acc-02.jpg?v=20261106f", title: "珍珠星星古銅鍊", en: "Pearl & Star Charm",
+  { no: "02", type: "necklace", file: "works/acc-02.jpg?v=20261106f", title: "珍珠星星古銅鍊", en: "Pearl & Star Charm",
     media: "手作項鍊 · Handmade necklace", style: "復古古銅",
     desc: "古銅色麻花鏈掛滿奶油色珍珠與網紋圓片，中央綴一枚綠色玉石環，下方再吊一顆小星星。復古又帶點俏皮，是很有存在感的主角項鍊。",
     details: ["古銅麻花鏈", "奶油珍珠", "綠玉石環", "星星吊飾"] },
-  { no: "03", file: "works/acc-03.jpg?v=20261112e", title: "彩晶珍珠糖果鍊", en: "Candy Crystal & Pearl",
+  { no: "03", type: "necklace", file: "works/acc-03.jpg?v=20261112e", title: "彩晶珍珠糖果鍊", en: "Candy Crystal & Pearl",
     media: "手作項鍊 · Handmade necklace", style: "彩晶珍珠",
     desc: "一顆珍珠、一顆切面彩晶交錯串起，中間用金色米粒珠隔開，紅、橙、黃、綠、藍、紫像一串彩色糖果。顏色繽紛卻不俗氣，搭白T或素色洋裝就很亮眼。",
     details: ["切面彩晶", "白珍珠", "金色米粒珠", "螺旋扣頭"] },
-  { no: "04", file: "works/acc-04.jpg?v=20261116c", title: "粉玫瑰珍珠不對稱耳環", en: "Pink Rose Asymmetry",
+  { no: "04", type: "earring", file: "works/acc-04.jpg?v=20261116c", title: "粉玫瑰珍珠不對稱耳環", en: "Pink Rose Asymmetry",
     media: "手作耳環 · Handmade earrings", style: "粉嫩甜美",
     desc: "左右兩邊刻意做成不一樣：一邊是粉色玫瑰、閃粉玻璃珠配淡紫切面水晶，另一邊是粉色圓釦、小玫瑰和金色愛心。兩邊都垂一顆珍珠，甜美又帶點玩心，搭洋裝或針織衫都可愛。",
     details: ["不對稱設計", "粉色玫瑰", "珍珠墜", "金色愛心"] },
-  { no: "05", file: "works/acc-05.jpg?v=20261118a", title: "桃紅條紋珍珠圓環耳環", en: "Magenta Stripe Hoops",
+  { no: "05", type: "earring", file: "works/acc-05.jpg?v=20261118a", title: "桃紅條紋珍珠圓環耳環", en: "Magenta Stripe Hoops",
     media: "手作耳環 · Handmade earrings", style: "亮色條紋",
     desc: "桃紅、粉紅與一道寶藍交錯的條紋圓環，透光時有糖果般的光澤，中間垂一顆白珍珠輕輕晃動。用金色圓圈與勾針串起，顏色大膽但很好搭，戴上就是整身的亮點。",
     details: ["條紋圓環", "桃紅＋寶藍", "白珍珠", "金色耳勾"] }
@@ -489,21 +510,27 @@ const CATS = {
 };
 
 const $ = s => document.querySelector(s);
-let cat = location.hash === '#accessories' ? 'accessories' : 'nails';
+let cat = location.hash.startsWith('#accessories') ? 'accessories' : 'nails';
 let sorted = [], latest = null;
+// 飾品子分類：新增作品時在 ACCESSORIES 每筆填 type（necklace／earring／bracelet…），這裡加上對應名稱即可
+const SUBS = { necklace: ['項鍊', 'Necklaces'], earring: ['耳環', 'Earrings'], bracelet: ['手鍊', 'Bracelets'], ring: ['戒指', 'Rings'] };
+const parseHash = () => { const [c, s] = location.hash.slice(1).split('/'); return { c: c === 'accessories' ? 'accessories' : 'nails', s: (c === 'accessories' && SUBS[s]) ? s : 'all' }; };
+let sub = parseHash().s;
 $('#n-nails').textContent = NAILS.length;
 $('#n-accessories').textContent = ACCESSORIES.length;
 
 function render(){
   const C = CATS[cat];
-  sorted = [...C.list].sort((a, b) => b.no.localeCompare(a.no));
+  const list = (cat === 'accessories' && sub !== 'all') ? C.list.filter(w => w.type === sub) : C.list;
+  sorted = [...list].sort((a, b) => b.no.localeCompare(a.no));
+  renderSubs();
   latest = sorted[0];
   document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.cat === cat));
   $('#tabs').dataset.cat = cat;
   $('#panel').setAttribute('aria-labelledby', 'tab-' + cat);
-  $('#m-count').textContent = C.list.length + ' ' + C.unit;
-  $('#m-style').textContent = [...new Set(C.list.map(w => w.style))].join('、');
-  $('#more-title').textContent = C.more;
+  $('#m-count').textContent = list.length + ' ' + C.unit;
+  $('#m-style').textContent = [...new Set(list.map(w => w.style))].join('、');
+  $('#more-title').textContent = (cat === 'accessories' && sub !== 'all') ? '更多' + SUBS[sub][0] : C.more;
 
   if (!latest) {
     $('#strip').innerHTML = '';
@@ -549,19 +576,42 @@ function render(){
   bindTilt();
 }
 
+// 飾品子分類按鈕：只顯示有作品的類別（只有一類時整排隱藏）
+function renderSubs(){
+  const el = $('#subs');
+  if (cat !== 'accessories') { el.hidden = true; return; }
+  const types = Object.keys(SUBS).filter(t => ACCESSORIES.some(w => w.type === t));
+  if (types.length < 2) { el.hidden = true; return; }
+  el.hidden = false;
+  const btn = (key, zh, en, n) => `<button class="sub-btn" type="button" data-sub="${key}" aria-pressed="${sub === key}">${zh}<span class="en">${en}</span><b>${n}</b></button>`;
+  el.innerHTML = '<span class="lbl">CATEGORY</span>' + btn('all', '全部', 'All', ACCESSORIES.length) +
+    types.map(t => btn(t, SUBS[t][0], SUBS[t][1], ACCESSORIES.filter(w => w.type === t).length)).join('');
+}
+function setSub(next){
+  if (next === sub) return;
+  const panel = $('#panel');
+  panel.classList.add('switching');
+  setTimeout(() => {
+    sub = next; render();
+    try { history.replaceState(null, '', '#accessories' + (sub === 'all' ? '' : '/' + sub)); } catch (e) {}
+    requestAnimationFrame(() => panel.classList.remove('switching'));
+  }, 220);
+}
+document.addEventListener('click', e => { const b = e.target.closest('.sub-btn'); if (b) setSub(b.dataset.sub); });
+
 // 切換分類：淡出 → 換內容 → 淡入，並記在網址 #nails / #accessories
 function switchTo(next){
   if (next === cat) return;
   const panel = $('#panel');
   panel.classList.add('switching');
   setTimeout(() => {
-    cat = next; render();
+    cat = next; sub = 'all'; render();
     try { history.replaceState(null, '', '#' + cat); } catch (e) {}
     requestAnimationFrame(() => panel.classList.remove('switching'));
   }, 220);
 }
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTo(t.dataset.cat)));
-addEventListener('hashchange', () => switchTo(location.hash === '#accessories' ? 'accessories' : 'nails'));
+addEventListener('hashchange', () => { const h = parseHash(); if (h.c !== cat) switchTo(h.c); else if (h.s !== sub) setSub(h.s); });
 
 // 放大鏡（每次換分類重新綁定）
 const Z = 2.6;
