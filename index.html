@@ -122,6 +122,7 @@ h1 small{display:block;font-style:normal;font-family:"Noto Serif TC",serif;font-
 .card .ph{aspect-ratio:4/5;overflow:hidden;background:var(--pearl)}
 .card .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .card:hover .ph img{transform:scale(1.05)}
+.card .ph.contain img{object-fit:contain}
 .card .body{padding:20px 22px 22px}
 .card .top{display:flex;justify-content:space-between}
 .card h4{font-family:"Noto Serif TC",serif;font-size:21px;margin-top:8px}
@@ -511,7 +512,7 @@ const ACCESSORIES = [
     media: "手作耳環 · Handmade earrings", style: "優雅垂墜",
     desc: "湖水綠圓片裡點綴金色閃粉線條，像水面映著光。下方垂著三串白珍珠，用金色管珠隔開，走動時輕輕晃動。綠配金典雅大方，上班或約會都適合。",
     details: ["湖水綠圓片", "金色閃粉", "珍珠垂墜", "金色管珠"] },
-  { no: "08", type: "earring", file: "works/acc-08.jpg?v=20261120d", title: "琥珀串珠珍珠耳環", en: "Amber Beaded Pearl",
+  { no: "08", type: "earring", file: "works/acc-08.jpg?v=20261120e", fit: "contain", title: "琥珀串珠珍珠耳環", en: "Amber Beaded Pearl",
     media: "手作耳環 · Handmade earrings", style: "復古典雅",
     desc: "用琥珀色管珠一圈圈繞成圓盤，中間鑲一顆大珍珠，再點上金色小花片。光線照過去，串珠會透出蜂蜜般的暖光，有種復古珠寶盒裡的味道，搭針織、風衣都很有氣質。",
     details: ["琥珀管珠", "手工繞圈", "大顆珍珠", "金色花片"] }
@@ -576,7 +577,7 @@ function render(){
   const rest = sorted.slice(1);
   $('#grid').innerHTML = rest.length ? rest.map((w, i) => `
     <article class="card reveal in" data-open="${w.no}" style="--i:${i % 3}">
-      <div class="ph"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>
+      <div class="ph${w.fit==='contain'?' contain':''}"><img src="${w.file}" alt="${w.title}" loading="lazy"></div>
       <div class="body">
         <div class="top"><span class="mono">No.${w.no}</span><span class="mono">LuLu’s Handmade</span></div>
         <h4>${w.title}</h4>
