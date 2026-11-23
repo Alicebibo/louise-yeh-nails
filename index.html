@@ -111,6 +111,12 @@ h1 small{display:block;font-style:normal;font-family:"Noto Serif TC",serif;font-
 .btns{margin-top:auto;padding-top:28px;display:flex;gap:10px;flex-wrap:wrap}
 .btn{font:inherit;font-size:14px;padding:10px 20px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;transition:.2s}
 .btn.ghost{background:transparent;color:var(--ink)}
+.store-link{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:11px 22px 11px 16px;border-radius:999px;border:1px solid var(--rose);background:rgba(254,253,251,.75);color:var(--rose-deep);text-decoration:none;font-size:15px;letter-spacing:.12em;box-shadow:0 10px 24px -18px rgba(70,62,54,.6);transition:.3s}
+.store-link svg{width:20px;height:20px;fill:var(--rose)}
+.store-link em{font-family:"Bodoni Moda",serif;font-style:italic;font-size:14px;letter-spacing:0;color:var(--muted)}
+.store-link b{font-weight:400;transition:transform .3s}
+.store-link:hover{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
+.store-link:hover svg{fill:#fff}.store-link:hover em{color:rgba(255,255,255,.8)}.store-link:hover b{transform:translateX(4px)}
 .btn:hover{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
 
 /* grid */
@@ -399,6 +405,7 @@ h1 small{animation:sub-in 1s ease 1s both}
         <div class="sub">美甲片 <span>&amp;</span> 飾品創作</div>
         <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
         <p class="lead">把喜歡的顏色、圖案與小心意，<br>一筆一筆畫進指尖，一顆一顆串成飾品。<br>每一件都是手作，新作品會陸續加入，歡迎常回來看看。</p>
+        <a class="store-link" href="https://alicebibo.github.io/louise-yeh-nails/store.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.8 8 12 11.7 5.2 8 12 4.3ZM5 9.7l6 3.3v6.6l-6-3.3V9.7Zm8 9.9V13l6-3.3v6.6l-6 3.3Z"/></svg><span>走進 3D 展示店</span><em>3D Showroom</em><b aria-hidden="true">→</b></a>
       </div>
     </div>
   </header>
