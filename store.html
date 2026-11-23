@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LuLu’s Handmade 3D 展示店</title>
+<meta name="description" content="走進 LuLu’s Handmade 的 3D 展示店面，360° 欣賞手作美甲片與飾品創作。">
+<link rel="icon" type="image/png" sizes="32x32" href="logo/icon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400;1,6..96,500&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f1; --paper:#fefdfb; --ink:#2e2925; --muted:#8a8078; --line:#e6e0d8;
+  --rose:#b5a184; --rose-deep:#7a6652; --rose-soft:#efebe5; --pearl:#faf8f5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#scene{position:fixed;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+#scene.hover{cursor:pointer}
+#scene:active{cursor:grabbing}
+
+/* top bar */
+.top{position:fixed;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;pointer-events:none;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;pointer-events:auto;text-decoration:none;color:inherit;background:rgba(254,253,251,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 18px 6px 8px;box-shadow:0 8px 24px -16px rgba(70,62,54,.5)}
+.brand img{height:40px;width:auto}
+.brand b{font-family:"Noto Serif TC",serif;font-weight:700;font-size:15px;letter-spacing:.08em;display:block;line-height:1.2}
+.brand i{font-family:"Bodoni Moda",serif;font-size:13px;color:var(--rose-deep);display:block;line-height:1.2}
+.back{pointer-events:auto;font-size:13px;letter-spacing:.12em;color:var(--rose-deep);text-decoration:none;background:rgba(254,253,251,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px;white-space:nowrap}
+.back:hover{background:var(--paper)}
+
+/* bottom nav */
+.nav{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:6px;padding:6px;background:rgba(254,253,251,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 30px -18px rgba(70,62,54,.55);z-index:5;max-width:calc(100% - 32px);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{font:inherit;font-size:14px;letter-spacing:.1em;border:0;background:transparent;color:var(--ink);padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.25s}
+.nav button .en{font-family:"Bodoni Moda",serif;font-style:italic;font-size:12px;color:var(--muted);margin-left:6px;letter-spacing:0}
+.nav button:hover{background:var(--rose-soft)}
+.nav button[aria-pressed="true"]{background:var(--rose-deep);color:#fff}
+.nav button[aria-pressed="true"] .en{color:rgba(255,255,255,.75)}
+.hint{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);font-size:12px;letter-spacing:.14em;color:var(--muted);background:rgba(254,253,251,.7);padding:6px 14px;border-radius:999px;z-index:4;white-space:nowrap;transition:opacity .6s;pointer-events:none}
+.hint.off{opacity:0}
+
+/* detail panel */
+.panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:var(--paper);border-left:1px solid var(--line);box-shadow:-20px 0 50px -30px rgba(70,62,54,.5);transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1);z-index:8;display:flex;flex-direction:column;overflow:auto}
+.panel.open{transform:none}
+.panel .ph{background:var(--pearl);padding:28px 28px 0}
+.panel .ph img{width:100%;display:block;border-radius:6px;box-shadow:0 14px 30px -18px rgba(70,62,54,.5)}
+.panel .bd{padding:24px 30px 34px}
+.panel .no{font-family:"Bodoni Moda",serif;font-size:13px;letter-spacing:.2em;color:var(--rose-deep)}
+.panel h2{font-family:"Noto Serif TC",serif;font-weight:700;font-size:26px;line-height:1.3;margin-top:8px}
+.panel .en{font-family:"Bodoni Moda",serif;font-style:italic;font-size:17px;color:var(--muted);margin-top:4px}
+.panel .media{font-size:13px;letter-spacing:.12em;color:var(--muted);margin-top:14px}
+.panel p{font-size:15px;line-height:1.9;margin-top:16px;color:#4a423c}
+.panel ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.panel li{font-size:13px;border:1px solid var(--line);background:var(--pearl);color:var(--rose-deep);padding:5px 12px;border-radius:999px}
+.panel .go{display:inline-block;margin-top:24px;font-size:14px;letter-spacing:.14em;color:#fff;background:var(--rose-deep);padding:11px 22px;border-radius:999px;text-decoration:none}
+.panel .x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(254,253,251,.9);font-size:20px;line-height:1;color:var(--ink);cursor:pointer}
+
+/* loader */
+.loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);z-index:20;transition:opacity .8s}
+.loader.done{opacity:0;pointer-events:none}
+.loader img{height:150px;animation:breathe 2.4s ease-in-out infinite}
+.loader .bar{width:180px;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.loader .bar i{display:block;height:100%;width:0;background:var(--rose);transition:width .3s}
+.loader span{font-size:12px;letter-spacing:.3em;color:var(--muted)}
+@keyframes breathe{50%{transform:scale(1.04);opacity:.85}}
+.err{display:none;position:fixed;inset:0;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:21;background:var(--bg);font-size:15px;line-height:1.9}
+
+@media (max-width:640px){
+  .top{padding:12px 16px}
+  .brand{padding:4px 14px 4px 6px}
+  .brand img{height:32px}
+  .brand b{font-size:13px}
+  .brand i{display:none}
+  .back{padding:8px 14px;font-size:12px}
+  .nav{bottom:14px}
+  .nav button{padding:8px 12px;font-size:13px}
+  .nav button .en{display:none}
+  .hint{bottom:70px;font-size:11px}
+  .panel{top:auto;bottom:0;height:auto;max-height:82vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(105%)}
+  .panel .ph{padding:20px 20px 0;display:flex;justify-content:center}
+  .panel .ph img{width:auto;max-width:100%;max-height:36vh}
+  .panel .bd{padding:18px 22px 28px}
+  .panel h2{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){.loader img{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="LuLu’s Handmade 3D 展示店面"></canvas>
+
+<header class="top">
+  <a class="brand" href="index.html"><img src="logo/emblem.png" alt=""><span><b>LuLu’s Handmade</b><i>3D Showroom</i></span></a>
+  <a class="back" href="index.html">← 回作品集</a>
+</header>
+
+<nav class="nav" aria-label="店面導覽">
+  <button data-view="overview" aria-pressed="true">全景<span class="en">Overview</span></button>
+  <button data-view="nails" aria-pressed="false">美甲片牆<span class="en">Nails</span></button>
+  <button data-view="acc" aria-pressed="false">飾品牆<span class="en">Jewelry</span></button>
+  <button data-view="counter" aria-pressed="false">櫃台<span class="en">Counter</span></button>
+</nav>
+<div class="hint" id="hint">拖曳轉動視角 · 滾輪或雙指縮放 · 點作品看介紹</div>
+
+<aside class="panel" id="panel" aria-hidden="true">
+  <button class="x" id="close" aria-label="關閉">×</button>
+  <div class="ph"><img id="p-img" alt=""></div>
+  <div class="bd">
+    <div class="no" id="p-no"></div>
+    <h2 id="p-title"></h2>
+    <div class="en" id="p-en"></div>
+    <div class="media" id="p-media"></div>
+    <p id="p-desc"></p>
+    <ul id="p-details"></ul>
+    <a class="go" id="p-go" href="index.html">在作品集查看 →</a>
+  </div>
+</aside>
+
+<div class="loader" id="loader"><img src="logo/main.png" alt="LuLu’s Handmade"><div class="bar"><i id="bar"></i></div><span>店面佈置中</span></div>
+<div class="err" id="err">這個瀏覽器無法顯示 3D 店面。<br>請改用最新版 Chrome、Safari 或 Edge 開啟，<br>或 <a href="index.html">回作品集</a> 瀏覽作品。</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 作品資料：直接讀作品集頁裡的清單，新增作品會自動出現在店裡 ---------- */
+async function loadWorks(){
+  const html = await (await fetch('index.html', {cache:'no-cache'})).text();
+  const grab = name => {
+    const m = html.match(new RegExp('const ' + name + ' = (\\[[\\s\\S]*?\\n\\]);'));
+    return m ? new Function('return ' + m[1])() : [];
+  };
+  return { nails: grab('NAILS'), acc: grab('ACCESSORIES') };
+}
+
+/* ---------- renderer / scene ---------- */
+const canvas = $('scene');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({canvas, antialias:true}); }
+catch(e){ $('err').style.display='flex'; $('loader').classList.add('done'); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#efe9e1');
+scene.fog = new THREE.Fog('#efe9e1', 16, 30);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 1.6;
+controls.maxDistance = 11;
+controls.maxPolarAngle = Math.PI * 0.53;
+controls.minPolarAngle = Math.PI * 0.18;
+controls.enablePan = false;
+controls.rotateSpeed = 0.6;
+
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onProgress = (u, a, b) => { $('bar').style.width = (a / b * 100) + '%'; };
+const texLoader = new THREE.TextureLoader(loadingManager);
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+function tex(url, cb){
+  return texLoader.load(url, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; cb && cb(t); });
+}
+
+/* ---------- 程式產生的材質（木地板、牆面、文字） ---------- */
+function canvasTex(w, h, draw, repeat){
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+  if (repeat){ t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...repeat); }
+  return t;
+}
+function rnd(seed){ let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+
+const floorTex = canvasTex(1024, 1024, (g, w, h) => {
+  const r = rnd(7), rows = 8, ph = h / rows;
+  for (let i = 0; i < rows; i++){
+    let x = -r() * 400;
+    while (x < w){
+      const len = 300 + r() * 360, tone = 196 + r() * 26;
+      g.fillStyle = `rgb(${tone},${tone * 0.86 | 0},${tone * 0.7 | 0})`;
+      g.fillRect(x, i * ph, len, ph);
+      g.globalAlpha = 0.07;
+      for (let k = 0; k < 14; k++){
+        g.strokeStyle = r() > .5 ? '#7a5a3a' : '#fff4e2';
+        g.lineWidth = 1 + r() * 2;
+        g.beginPath(); const y = i * ph + r() * ph;
+        g.moveTo(x, y); g.bezierCurveTo(x + len * .3, y + (r() - .5) * 10, x + len * .7, y + (r() - .5) * 10, x + len, y);
+        g.stroke();
+      }
+      g.globalAlpha = 1;
+      g.fillStyle = 'rgba(90,64,40,.35)'; g.fillRect(x, i * ph, 2, ph);
+      x += len;
+    }
+    g.fillStyle = 'rgba(90,64,40,.3)'; g.fillRect(0, i * ph, w, 2);
+  }
+}, [3, 3]);
+
+const wallTex = canvasTex(512, 512, (g, w, h) => {
+  g.fillStyle = '#f4efe8'; g.fillRect(0, 0, w, h);
+  const r = rnd(3);
+  for (let i = 0; i < 9000; i++){
+    const v = r() > .5 ? 255 : 200;
+    g.fillStyle = `rgba(${v},${v - 8},${v - 20},${r() * .05})`;
+    g.fillRect(r() * w, r() * h, 2, 2);
+  }
+}, [4, 2]);
+
+function textTex(lines, {w = 1024, h = 256, bg = null} = {}){
+  return canvasTex(w, h, (g) => {
+    if (bg){ g.fillStyle = bg; g.fillRect(0, 0, w, h); }
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    lines.forEach(l => { g.font = l.font; g.fillStyle = l.color || '#2e2925'; g.fillText(l.text, w / 2, l.y * h); });
+  });
+}
+
+/* ---------- 材質 ---------- */
+const M = {
+  floor: new THREE.MeshStandardMaterial({map: floorTex, roughness: .55, metalness: 0, envMapIntensity: .5}),
+  wall: new THREE.MeshStandardMaterial({map: wallTex, roughness: .95, envMapIntensity: .3}),
+  wallLow: new THREE.MeshStandardMaterial({color: '#e9e1d6', roughness: .9, envMapIntensity: .3}),
+  white: new THREE.MeshStandardMaterial({color: '#fbf8f3', roughness: .35, envMapIntensity: .6}),
+  marble: new THREE.MeshStandardMaterial({color: '#f6f2ec', roughness: .18, metalness: 0, envMapIntensity: .9}),
+  gold: new THREE.MeshStandardMaterial({color: '#c9a76a', roughness: .28, metalness: 1, envMapIntensity: 1.2}),
+  goldSoft: new THREE.MeshStandardMaterial({color: '#cdb38a', roughness: .45, metalness: .8, envMapIntensity: 1}),
+  wood: new THREE.MeshStandardMaterial({color: '#c9a882', roughness: .6}),
+  mat: new THREE.MeshStandardMaterial({color: '#fefcf8', roughness: .9}),
+  leaf: new THREE.MeshStandardMaterial({color: '#8a9a78', roughness: .8}),
+  pot: new THREE.MeshStandardMaterial({color: '#efe7dc', roughness: .7}),
+  glass: new THREE.MeshPhysicalMaterial({color: '#ffffff', roughness: .05, transmission: .92, thickness: .05, transparent: true, opacity: .35, envMapIntensity: 1}),
+  bulb: new THREE.MeshStandardMaterial({color: '#fff3dc', emissive: '#ffe2b0', emissiveIntensity: 1.6}),
+};
+
+/* ---------- 房間 ---------- */
+const W = 14, D = 12, H = 5;
+const room = new THREE.Group(); scene.add(room);
+function box(w, h, d, mat, x, y, z, {cast = false, receive = true} = {}){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = receive; room.add(m); return m;
+}
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D + 6), M.floor);
+floor.rotation.x = -Math.PI / 2; floor.position.z = 3; floor.receiveShadow = true; room.add(floor);
+// walls: back, left, right
+box(W, H, .2, M.wall, 0, H / 2, -D / 2 - .1);
+box(.2, H, D, M.wall, -W / 2 - .1, H / 2, 0);
+box(.2, H, D, M.wall, W / 2 + .1, H / 2, 0);
+// wainscot lower panels + gold rail + baseboard
+box(W, 1.0, .06, M.wallLow, 0, .5, -D / 2 + .03);
+box(.06, 1.0, D, M.wallLow, -W / 2 + .03, .5, 0);
+box(.06, 1.0, D, M.wallLow, W / 2 - .03, .5, 0);
+box(W, .04, .1, M.gold, 0, 1.0, -D / 2 + .05);
+box(.1, .04, D, M.gold, -W / 2 + .05, 1.0, 0);
+box(.1, .04, D, M.gold, W / 2 - .05, 1.0, 0);
+box(W, .14, .1, M.white, 0, .07, -D / 2 + .05);
+box(.1, .14, D, M.white, -W / 2 + .05, .07, 0);
+box(.1, .14, D, M.white, W / 2 - .05, .07, 0);
+// ceiling beam line (crown)
+box(W, .12, .14, M.white, 0, H - .06, -D / 2 + .07);
+box(.14, .12, D, M.white, -W / 2 + .07, H - .06, 0);
+box(.14, .12, D, M.white, W / 2 - .07, H - .06, 0);
+// round rug
+const rug = new THREE.Mesh(new THREE.CircleGeometry(3.4, 64), new THREE.MeshStandardMaterial({color: '#ebe2d6', roughness: 1}));
+rug.rotation.x = -Math.PI / 2; rug.position.set(0, .005, .6); rug.receiveShadow = true; room.add(rug);
+const rugRing = new THREE.Mesh(new THREE.RingGeometry(3.15, 3.22, 64), new THREE.MeshStandardMaterial({color: '#cdb38a', roughness: .8}));
+rugRing.rotation.x = -Math.PI / 2; rugRing.position.set(0, .007, .6); room.add(rugRing);
+
+/* ---------- 燈光 ---------- */
+scene.add(new THREE.HemisphereLight('#fff8ee', '#d9cbb8', .75));
+const sun = new THREE.DirectionalLight('#fff4e4', 1.1);
+sun.position.set(4, 9, 7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, {left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 25});
+sun.shadow.bias = -0.0004; sun.shadow.radius = 4;
+scene.add(sun);
+
+// pendant lamps
+function pendant(x, z, len){
+  const g = new THREE.Group();
+  const cord = new THREE.Mesh(new THREE.CylinderGeometry(.008, .008, len, 6), M.gold);
+  cord.position.y = H - len / 2; g.add(cord);
+  const shade = new THREE.Mesh(new THREE.SphereGeometry(.26, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({color: '#f7f1e8', roughness: .4, side: THREE.DoubleSide, emissive: '#ffe9c6', emissiveIntensity: .15}));
+  shade.position.y = H - len; g.add(shade);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(.26, .012, 8, 48), M.gold);
+  ring.rotation.x = Math.PI / 2; ring.position.y = H - len; g.add(ring);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), M.bulb);
+  bulb.position.y = H - len - .02; g.add(bulb);
+  const l = new THREE.PointLight('#ffdcae', 4, 6, 1.6);
+  l.position.y = H - len - .12; g.add(l);
+  g.position.set(x, 0, z); scene.add(g);
+}
+pendant(-2.5, .6, 1.5); pendant(0, .6, 1.2); pendant(2.5, .6, 1.5);
+
+/* ---------- 作品相框 ---------- */
+const clickable = [];
+function framedWork(work, cat, {height = 1.1, depth = .05, frame = .06, mat = .1, light = true} = {}){
+  const g = new THREE.Group();
+  const photo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({color: '#ddd', roughness: .55, envMapIntensity: .2}));
+  const matBoard = new THREE.Mesh(new THREE.BoxGeometry(1, 1, depth * .6), M.mat);
+  const outer = new THREE.Mesh(new RoundedBoxGeometry(1, 1, depth, 2, .012), M.gold);
+  outer.castShadow = true;
+  g.add(outer, matBoard, photo);
+  const layout = aspect => {
+    const ph = height, pw = height * aspect;
+    photo.scale.set(pw, ph, 1); photo.position.z = depth * .55;
+    matBoard.scale.set(pw + mat * 2, ph + mat * 2, 1); matBoard.position.z = depth * .2;
+    outer.scale.set(pw + (mat + frame) * 2, ph + (mat + frame) * 2, 1);
+    g.userData.w = pw + (mat + frame) * 2; g.userData.h = ph + (mat + frame) * 2;
+  };
+  layout(.8);
+  tex(work.file, t => {
+    photo.material.map = t;
+    photo.material.emissiveMap = t; photo.material.emissive = new THREE.Color('#ffffff'); photo.material.emissiveIntensity = .38;
+    photo.material.color.set('#ffffff'); photo.material.needsUpdate = true;
+    layout(t.image.width / t.image.height);
+  });
+  g.userData.work = work; g.userData.cat = cat;
+  g.traverse(o => { if (o.isMesh) { o.userData.frame = g; clickable.push(o); } });
+  if (light){
+    const s = new THREE.SpotLight('#fff1dc', 6, 4.5, .5, .6, 1.4);
+    s.position.set(0, 1.5, 1.1); s.target = photo; g.add(s);
+  }
+  return g;
+}
+
+function plaque(work){
+  const t = textTex([
+    {text: 'NO.' + work.no, font: '500 40px "Bodoni Moda", serif', color: '#7a6652', y: .3},
+    {text: work.title, font: '700 54px "Noto Serif TC", serif', color: '#2e2925', y: .66},
+  ], {w: 768, h: 192, bg: '#fefcf8'});
+  const m = new THREE.Mesh(new THREE.BoxGeometry(.62, .155, .015), [M.goldSoft, M.goldSoft, M.goldSoft, M.goldSoft, new THREE.MeshStandardMaterial({map: t, roughness: .7}), M.goldSoft]);
+  return m;
+}
+
+function wallTitle(zh, en){
+  const t = textTex([
+    {text: zh, font: '700 92px "Noto Serif TC", serif', color: '#2e2925', y: .38},
+    {text: en, font: 'italic 400 58px "Bodoni Moda", serif', color: '#7a6652', y: .78},
+  ], {w: 1024, h: 256});
+  return new THREE.Mesh(new THREE.PlaneGeometry(2.4, .6), new THREE.MeshStandardMaterial({map: t, transparent: true, roughness: .9}));
+}
+
+/* ---------- 櫃台 + 招牌 ---------- */
+function buildCounter(){
+  // logo sign with arch
+  const arch = new THREE.Group();
+  const archShape = new THREE.Shape();
+  const aw = 1.6, ah = 2.2;
+  archShape.moveTo(-aw, 0); archShape.lineTo(-aw, ah); archShape.absarc(0, ah, aw, Math.PI, 0, true); archShape.lineTo(aw, 0); archShape.lineTo(-aw, 0);
+  const archPanel = new THREE.Mesh(new THREE.ShapeGeometry(archShape, 48), new THREE.MeshStandardMaterial({color: '#efe7dc', roughness: .9}));
+  arch.add(archPanel);
+  const pts = []; for (let i = 0; i <= 64; i++){ const a = Math.PI - Math.PI * i / 64; pts.push(new THREE.Vector3(Math.cos(a) * aw, ah + Math.sin(a) * aw, 0)); }
+  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-aw, 0, 0), ...pts, new THREE.Vector3(aw, 0, 0)]);
+  const trim = new THREE.Mesh(new THREE.TubeGeometry(curve, 160, .025, 8, false), M.gold);
+  arch.add(trim);
+  arch.position.set(0, 1.04, -D / 2 + .02);
+  room.add(arch);
+  tex('logo/main.png', t => {
+    const a = t.image.width / t.image.height, h = 2.25;
+    const sign = new THREE.Mesh(new THREE.PlaneGeometry(h * a, h), new THREE.MeshStandardMaterial({map: t, transparent: true, roughness: .5, metalness: .2, emissive: '#ffffff', emissiveMap: t, emissiveIntensity: .25}));
+    sign.position.set(0, 3.0, -D / 2 + .05); room.add(sign);
+  });
+  const spot = new THREE.SpotLight('#fff0d8', 10, 6, .6, .7, 1.3);
+  spot.position.set(0, 4.8, -3.6); spot.target.position.set(0, 3, -D / 2); room.add(spot, spot.target);
+
+  // counter
+  const c = new THREE.Group();
+  const body = new THREE.Mesh(new RoundedBoxGeometry(3.4, 1.0, .8, 3, .06), M.white);
+  body.position.y = .5; body.castShadow = body.receiveShadow = true; c.add(body);
+  for (let i = -6; i <= 6; i++){
+    const flute = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .82, 12), M.white);
+    flute.position.set(i * .24, .5, .41); c.add(flute);
+  }
+  const top = new THREE.Mesh(new RoundedBoxGeometry(3.6, .07, .95, 2, .03), M.marble);
+  top.position.y = 1.03; top.castShadow = top.receiveShadow = true; c.add(top);
+  const band = new THREE.Mesh(new THREE.BoxGeometry(3.42, .03, .02), M.gold);
+  band.position.set(0, .96, .41); c.add(band);
+  // little props on counter: vase + flowers, jewelry tray, card stand
+  const vase = new THREE.Mesh(new THREE.CylinderGeometry(.09, .12, .32, 24), M.pot);
+  vase.position.set(-1.25, 1.22, 0); vase.castShadow = true; c.add(vase);
+  for (let i = 0; i < 7; i++){
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, .38, 4), M.leaf);
+    const a = i / 7 * Math.PI * 2, tilt = .25;
+    stem.position.set(-1.25 + Math.cos(a) * .05, 1.52, Math.sin(a) * .05); stem.rotation.set(Math.sin(a) * tilt, 0, -Math.cos(a) * tilt); c.add(stem);
+    const bloom = new THREE.Mesh(new THREE.SphereGeometry(.055, 12, 10), new THREE.MeshStandardMaterial({color: ['#f2d7d0', '#fbf3ea', '#e8c9b5'][i % 3], roughness: .8}));
+    bloom.position.set(-1.25 + Math.cos(a) * .14, 1.7, Math.sin(a) * .14); bloom.castShadow = true; c.add(bloom);
+  }
+  const tray = new THREE.Mesh(new THREE.CylinderGeometry(.32, .32, .03, 48), M.gold);
+  tray.position.set(1.0, 1.08, .05); c.add(tray);
+  const pearlMat = new THREE.MeshPhysicalMaterial({color: '#fbf6ee', roughness: .22, clearcoat: 1, clearcoatRoughness: .15, sheen: 1, sheenColor: new THREE.Color('#ffe9d0'), envMapIntensity: 1.2});
+  for (let i = 0; i < 18; i++){
+    const a = i / 18 * Math.PI * 2, r = .2;
+    const p = new THREE.Mesh(new THREE.SphereGeometry(.028, 16, 12), pearlMat);
+    p.position.set(1.0 + Math.cos(a) * r, 1.12, .05 + Math.sin(a) * r); p.castShadow = true; c.add(p);
+  }
+  const big = new THREE.Mesh(new THREE.SphereGeometry(.06, 24, 16), pearlMat);
+  big.position.set(1.0, 1.15, .05); c.add(big);
+  c.position.set(0, 0, -D / 2 + 1.2);
+  room.add(c);
+}
+
+/* ---------- 展示台（中間三座，放最新作品） ---------- */
+const spinners = [];
+function pedestal(x, z, work, cat, h = .95){
+  const g = new THREE.Group();
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(.5, .55, .08, 48), M.gold);
+  base.position.y = .04; base.castShadow = true; g.add(base);
+  const col = new THREE.Mesh(new THREE.CylinderGeometry(.4, .42, h, 48), M.marble);
+  col.position.y = h / 2 + .08; col.castShadow = col.receiveShadow = true; g.add(col);
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, .05, 48), M.gold);
+  cap.position.y = h + .1; cap.castShadow = true; g.add(cap);
+  const dome = new THREE.Mesh(new THREE.CylinderGeometry(.46, .46, 1.35, 48, 1, true), M.glass);
+  dome.position.y = h + .8; g.add(dome);
+  const domeTop = new THREE.Mesh(new THREE.CylinderGeometry(.48, .48, .03, 48), M.gold);
+  domeTop.position.y = h + 1.48; g.add(domeTop);
+  if (work){
+    const f = framedWork(work, cat, {height: .78, frame: .035, mat: .05, depth: .035, light: false});
+    const holder = new THREE.Group(); holder.position.y = h + .62; holder.add(f);
+    const back = framedWork(work, cat, {height: .78, frame: .035, mat: .05, depth: .035, light: false});
+    back.rotation.y = Math.PI; holder.add(back);
+    g.add(holder); spinners.push(holder);
+    const lbl = plaque(work); lbl.scale.setScalar(.85);
+    lbl.position.set(0, h * .62, .425); lbl.rotation.x = -.05; g.add(lbl);
+  }
+  g.position.set(x, 0, z); room.add(g);
+  return g;
+}
+
+/* ---------- 綠植 ---------- */
+function plant(x, z, s = 1){
+  const g = new THREE.Group();
+  const pot = new THREE.Mesh(new THREE.CylinderGeometry(.28, .22, .5, 32), M.pot);
+  pot.position.y = .25; pot.castShadow = true; g.add(pot);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(.28, .012, 8, 40), M.gold); rim.rotation.x = Math.PI / 2; rim.position.y = .5; g.add(rim);
+  const r = rnd(x * 100 + z * 10 + 11);
+  for (let i = 0; i < 16; i++){
+    const leaf = new THREE.Mesh(new THREE.SphereGeometry(.16, 12, 8), M.leaf);
+    leaf.scale.set(.5, 1.6, .18);
+    const a = r() * Math.PI * 2, t = .3 + r() * .5;
+    leaf.position.set(Math.cos(a) * .12 * t, .7 + r() * .8, Math.sin(a) * .12 * t);
+    leaf.rotation.set(Math.sin(a) * t, a, -Math.cos(a) * t); leaf.castShadow = true; g.add(leaf);
+  }
+  g.scale.setScalar(s); g.position.set(x, 0, z); room.add(g);
+}
+
+/* ---------- 擺放作品 ---------- */
+function layoutWorks({nails, acc}){
+  const latestFirst = list => list.slice().reverse();
+  const N = latestFirst(nails), A = latestFirst(acc);
+
+  // 左牆：美甲片
+  const lt = wallTitle('美甲片', 'Press-on Nails');
+  lt.position.set(-W / 2 + .03, 4.25, 0); lt.rotation.y = Math.PI / 2; room.add(lt);
+  placeOnWall(N, 'nails', -1);
+  // 右牆：飾品
+  const rt = wallTitle('飾品創作', 'Accessories');
+  rt.position.set(W / 2 - .03, 4.25, 0); rt.rotation.y = -Math.PI / 2; room.add(rt);
+  placeOnWall(A, 'accessories', 1);
+
+  // 中央展示台：最新美甲、最新項鍊、最新耳環
+  const latest = t => A.find(w => w.type === t);
+  pedestal(-2.5, .6, N[0], 'nails');
+  pedestal(0, .2, latest('necklace') || A[0], 'accessories', 1.05);
+  pedestal(2.5, .6, latest('earring') || A[1], 'accessories');
+}
+
+function placeOnWall(list, cat, side){
+  // side: -1 left wall (x=-W/2), +1 right wall
+  const n = list.length, span = D - 2.4;
+  const rows = n > 7 ? 2 : 1, perRow = Math.ceil(n / rows);
+  const h = rows === 2 ? .95 : 1.25;
+  const ys = rows === 2 ? [3.05, 1.72] : [2.35];
+  list.forEach((w, i) => {
+    const r = Math.floor(i / perRow), k = i % perRow, cnt = Math.min(perRow, n - r * perRow);
+    const step = span / Math.max(perRow, 1);
+    const z = (k - (cnt - 1) / 2) * step * -side;
+    const f = framedWork(w, cat, {height: h});
+    f.position.set(side * (W / 2 - .06), ys[r], z);
+    f.rotation.y = -side * Math.PI / 2;
+    room.add(f);
+    const p = plaque(w); p.scale.setScalar(rows === 2 ? .8 : .95);
+    p.position.set(side * (W / 2 - .03), ys[r] - h / 2 - .26, z);
+    p.rotation.y = -side * Math.PI / 2;
+    room.add(p);
+  });
+}
+
+/* ---------- 視角 ---------- */
+const views = {
+  overview: {pos: [0, 3.0, 9.6], target: [0, 1.9, -.5]},
+  nails:    {pos: [1.6, 2.3, 0], target: [-W / 2, 2.25, 0]},
+  acc:      {pos: [-1.6, 2.4, 0], target: [W / 2, 2.35, 0]},
+  counter:  {pos: [0, 2.2, -.6], target: [0, 2.2, -D / 2]},
+};
+let tween = null;
+function flyTo(pos, target, dur = 1.3){
+  tween = {p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), s: performance.now(), d: reduce ? 1 : dur * 1000};
+}
+function setView(name){
+  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
+  const v = views[name]; flyTo(v.pos, v.target);
+}
+document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => { closePanel(); setView(b.dataset.view); }));
+
+/* ---------- 點選作品 ---------- */
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+let hovered = null, downAt = null;
+function pick(e){
+  const r = canvas.getBoundingClientRect();
+  ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObjects(clickable, false)[0];
+  return hit ? hit.object.userData.frame : null;
+}
+canvas.addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  const f = pick(e);
+  if (f !== hovered){
+    if (hovered) hovered.userData.hoverT = 0;
+    hovered = f; canvas.classList.toggle('hover', !!f);
+  }
+});
+canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; hideHint(); });
+canvas.addEventListener('pointerup', e => {
+  if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
+  const f = pick(e); if (f) openWork(f);
+});
+
+const tmpV = new THREE.Vector3(), tmpN = new THREE.Vector3(), tmpQ = new THREE.Quaternion();
+function openWork(frame){
+  const w = frame.userData.work;
+  $('p-img').src = w.file; $('p-img').alt = w.title;
+  $('p-no').textContent = 'NO.' + w.no;
+  $('p-title').textContent = w.title;
+  $('p-en').textContent = w.en || '';
+  $('p-media').textContent = w.media || '';
+  $('p-desc').textContent = w.desc || '';
+  $('p-details').innerHTML = '';
+  (w.details || []).forEach(d => { const li = document.createElement('li'); li.textContent = d; $('p-details').appendChild(li); });
+  $('p-go').href = 'index.html#' + frame.userData.cat + (w.type ? '/' + w.type : '');
+  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false');
+  // fly camera in front of the frame
+  frame.getWorldPosition(tmpV);
+  frame.getWorldQuaternion(tmpQ);
+  tmpN.set(0, 0, 1).applyQuaternion(tmpQ).setY(0).normalize();
+  const dist = Math.max(frame.userData.h || 1.4, 1) * 1.55 + .6;
+  const pos = tmpV.clone().addScaledVector(tmpN, dist);
+  // when the panel covers the right side on desktop, shift the camera so the work sits left of center
+  if (innerWidth > 640){ const side = new THREE.Vector3().crossVectors(tmpN, new THREE.Vector3(0, 1, 0)).normalize(); pos.addScaledVector(side, -.45); tmpV.addScaledVector(side, -.45); }
+  else { pos.y += .35; tmpV.y -= .25; }
+  flyTo(pos.toArray(), tmpV.toArray(), 1.1);
+  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+}
+function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); }
+$('close').addEventListener('click', closePanel);
+addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+let hintTimer = setTimeout(hideHint, 9000);
+function hideHint(){ $('hint').classList.add('off'); clearTimeout(hintTimer); }
+
+/* ---------- 閃光粒子 ---------- */
+const sparkGeo = new THREE.BufferGeometry();
+const SP = 140, sp = new Float32Array(SP * 3);
+const sr = rnd(42);
+for (let i = 0; i < SP; i++){ sp[i * 3] = (sr() - .5) * W * .9; sp[i * 3 + 1] = .4 + sr() * (H - .8); sp[i * 3 + 2] = (sr() - .5) * D * .9; }
+sparkGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+const sparkTex = canvasTex(64, 64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,248,230,1)'); gr.addColorStop(.25, 'rgba(255,230,190,.6)'); gr.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); });
+const sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({size: .07, map: sparkTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .7}));
+scene.add(sparks);
+
+/* ---------- 啟動 ---------- */
+function resize(){
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h;
+  camera.fov = w < 640 ? 62 : 50; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+buildCounter();
+plant(-W / 2 + .7, -D / 2 + .7, 1.15); plant(W / 2 - .7, -D / 2 + .7, 1.15);
+plant(-W / 2 + .7, D / 2 - 1.2, .95); plant(W / 2 - .7, D / 2 - 1.2, .95);
+
+const start = views.overview;
+camera.position.set(start.pos[0], start.pos[1] + 1.2, start.pos[2] + 3);
+controls.target.set(...start.target);
+
+let worksReady = false;
+loadWorks().then(data => { layoutWorks(data); worksReady = true; }).catch(err => { console.error(err); worksReady = true; });
+
+loadingManager.onLoad = () => {
+  if (!worksReady) return;
+  setTimeout(() => { $('loader').classList.add('done'); flyTo(start.pos, start.target, 2.2); }, 250);
+};
+// safety: never keep the loader forever
+setTimeout(() => { if (!$('loader').classList.contains('done')){ $('loader').classList.add('done'); flyTo(start.pos, start.target, 2); } }, 9000);
+
+const clock = new THREE.Clock();
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta(), t = clock.elapsedTime;
+  if (tween){
+    const k = Math.min((performance.now() - tween.s) / tween.d, 1), e = ease(k);
+    camera.position.lerpVectors(tween.p0, tween.p1, e);
+    controls.target.lerpVectors(tween.t0, tween.t1, e);
+    if (k >= 1) tween = null;
+  }
+  if (!reduce){
+    spinners.forEach((s, i) => { s.rotation.y += dt * .35; s.position.y += Math.sin(t * 1.2 + i) * .0006; });
+    sparks.rotation.y = t * .01;
+    sparks.material.opacity = .55 + Math.sin(t * 1.6) * .15;
+  }
+  // keep the orbit target inside the room
+  controls.target.x = THREE.MathUtils.clamp(controls.target.x, -W / 2 + .5, W / 2 - .5);
+  controls.target.z = THREE.MathUtils.clamp(controls.target.z, -D / 2 + .5, D / 2);
+  controls.update();
+  // keep the camera inside the room walls (front is open)
+  camera.position.x = THREE.MathUtils.clamp(camera.position.x, -W / 2 + .4, W / 2 - .4);
+  camera.position.z = THREE.MathUtils.clamp(camera.position.z, -D / 2 + .4, 14);
+  camera.position.y = THREE.MathUtils.clamp(camera.position.y, .5, H - .3);
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>
