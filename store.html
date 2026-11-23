@@ -46,6 +46,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .nav button:hover{background:var(--rose-soft)}
 .nav button[aria-pressed="true"]{background:var(--rose-deep);color:#fff}
 .nav button[aria-pressed="true"] .en{color:rgba(255,255,255,.75)}
+.pager{position:fixed;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:rgba(254,253,251,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 24px -14px rgba(70,62,54,.6);color:var(--rose-deep);font-size:26px;line-height:1;cursor:pointer;z-index:6;display:none;align-items:center;justify-content:center;transition:background .2s,opacity .2s}
+.pager:hover{background:var(--paper)}
+.pager:disabled{opacity:.3;cursor:default}
+.pager.prev{left:14px}.pager.next{right:14px}
+body.wall-mode .pager{display:flex}
+body.panel-open .pager.next{right:calc(min(400px,92vw) + 14px)}
+.counter{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);font-family:"Bodoni Moda",serif;font-size:13px;letter-spacing:.2em;color:var(--rose-deep);background:rgba(254,253,251,.8);padding:5px 14px;border-radius:999px;z-index:4;display:none}
+body.wall-mode .counter{display:block}
 .hint{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);font-size:12px;letter-spacing:.14em;color:var(--muted);background:rgba(254,253,251,.7);padding:6px 14px;border-radius:999px;z-index:4;white-space:nowrap;transition:opacity .6s;pointer-events:none}
 .hint.off{opacity:0}
 
@@ -86,6 +94,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
   .nav button{padding:8px 12px;font-size:13px}
   .nav button .en{display:none}
   .hint{bottom:70px;font-size:11px}
+  .counter{bottom:70px}
+  .pager{width:44px;height:44px;font-size:22px}
+  body.panel-open .pager{display:none}
   .panel{top:auto;bottom:0;height:auto;max-height:82vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(105%)}
   .panel .ph{padding:20px 20px 0;display:flex;justify-content:center}
   .panel .ph img{width:auto;max-width:100%;max-height:36vh}
@@ -109,6 +120,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
   <button data-view="acc" aria-pressed="false">飾品牆<span class="en">Jewelry</span></button>
   <button data-view="counter" aria-pressed="false">櫃台<span class="en">Counter</span></button>
 </nav>
+<button class="pager prev" id="prev" aria-label="上一幅">‹</button>
+<button class="pager next" id="next" aria-label="下一幅">›</button>
+<div class="counter" id="counter"></div>
 <div class="hint" id="hint">拖曳轉動視角 · 滾輪或雙指縮放 · 點作品看介紹</div>
 
 <aside class="panel" id="panel" aria-hidden="true">
@@ -492,6 +506,7 @@ function layoutWorks({nails, acc}){
   pedestal(2.5, 2.4, latest('earring') || A[1], 'accessories');
 }
 
+const wallCols = {nails: [], accessories: []};
 function placeOnWall(list, cat, side){
   // side: -1 left wall (x=-W/2), +1 right wall
   const n = list.length, span = D - 2.4;
@@ -504,6 +519,8 @@ function placeOnWall(list, cat, side){
     const z = (k - (cnt - 1) / 2) * step * -side;
     const f = framedWork(w, cat, {height: h});
     f.position.set(side * (W / 2 - .06), ys[r], z);
+    if (!wallCols[cat].some(v => Math.abs(v - z) < .05)) wallCols[cat].push(z);
+    f.userData.col = z;
     f.rotation.y = -side * Math.PI / 2;
     room.add(f);
     const p = plaque(w); p.scale.setScalar(rows === 2 ? .8 : .95);
@@ -524,10 +541,40 @@ let tween = null;
 function flyTo(pos, target, dur = 1.3){
   tween = {p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), s: performance.now(), d: reduce ? 1 : dur * 1000};
 }
+let wall = null, colIdx = -1;
+const isMobile = () => innerWidth < 640;
+function colsFor(name){
+  const cat = name === 'nails' ? 'nails' : 'accessories';
+  // order columns left→right as seen on screen
+  return wallCols[cat].slice().sort((a, b) => name === 'nails' ? b - a : a - b);
+}
+function wallFocus(i){
+  const cols = colsFor(wall); if (!cols.length) return;
+  colIdx = Math.max(0, Math.min(cols.length - 1, i));
+  const side = wall === 'nails' ? -1 : 1, z = cols[colIdx], d = isMobile() ? 2.9 : 3.6;
+  flyTo([side * (W / 2 - d), 2.4, z], [side * W / 2, 2.38, z], .9);
+  updatePager();
+}
+function updatePager(){
+  const n = wall ? colsFor(wall).length : 0;
+  $('prev').disabled = colIdx === 0;
+  $('next').disabled = colIdx === n - 1;
+  $('counter').textContent = colIdx < 0 ? '' : (colIdx + 1) + ' / ' + n;
+  $('counter').style.visibility = colIdx < 0 ? 'hidden' : 'visible';
+}
+function setWall(name){ wall = name; document.body.classList.toggle('wall-mode', !!name); }
 function setView(name){
   document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
+  if (name === 'nails' || name === 'acc'){
+    setWall(name);
+    if (isMobile()) { wallFocus(0); return; }
+    colIdx = -1; updatePager();
+  } else setWall(null);
   const v = views[name]; flyTo(v.pos, v.target);
 }
+$('prev').addEventListener('click', () => { closePanel(); wallFocus(colIdx < 0 ? colsFor(wall).length - 1 : colIdx - 1); });
+$('next').addEventListener('click', () => { closePanel(); wallFocus(colIdx < 0 ? 0 : colIdx + 1); });
+addEventListener('keydown', e => { if (!wall) return; if (e.key === 'ArrowLeft') $('prev').click(); if (e.key === 'ArrowRight') $('next').click(); });
 document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => { closePanel(); setView(b.dataset.view); }));
 
 /* ---------- 點選作品 ---------- */
@@ -566,7 +613,11 @@ function openWork(frame){
   $('p-details').innerHTML = '';
   (w.details || []).forEach(d => { const li = document.createElement('li'); li.textContent = d; $('p-details').appendChild(li); });
   $('p-go').href = 'index.html#' + frame.userData.cat + (w.type ? '/' + w.type : '');
-  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false');
+  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false'); document.body.classList.add('panel-open');
+  if (frame.userData.col !== undefined){
+    const name = frame.userData.cat === 'nails' ? 'nails' : 'acc';
+    setWall(name); colIdx = colsFor(name).findIndex(v => Math.abs(v - frame.userData.col) < .05); updatePager();
+  } else setWall(null);
   // fly camera in front of the frame
   frame.getWorldPosition(tmpV);
   frame.getWorldQuaternion(tmpQ);
@@ -579,7 +630,7 @@ function openWork(frame){
   flyTo(pos.toArray(), tmpV.toArray(), 1.1);
   document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', 'false'));
 }
-function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); }
+function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); document.body.classList.remove('panel-open'); }
 $('close').addEventListener('click', closePanel);
 addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
 
