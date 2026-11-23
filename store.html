@@ -9,11 +9,11 @@
 <meta property="og:title" content="LuLu’s Handmade｜3D 展示店">
 <meta property="og:description" content="走進 LuLu’s Handmade 的 3D 展示店面，360° 欣賞手作美甲片與飾品創作。">
 <meta property="og:url" content="https://alicebibo.github.io/louise-yeh-nails/store.html">
-<meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123a">
+<meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123b">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123a">
+<meta name="twitter:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123b">
 <link rel="icon" type="image/png" sizes="32x32" href="logo/icon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -331,11 +331,11 @@ function pendant(x, z, len){
   l.position.y = H - len - .12; g.add(l);
   g.position.set(x, 0, z); scene.add(g);
 }
-pendant(-2.5, 2.4, 1.5); pendant(0, 2.0, 1.2); pendant(2.5, 2.4, 1.5);
+pendant(-2.6, 2.4, 1.35); pendant(0, 2.0, 1.25); pendant(2.6, 2.4, 1.35);
 
 /* ---------- 作品相框 ---------- */
 const clickable = [];
-function framedWork(work, cat, {height = 1.1, depth = .05, frame = .06, mat = .1, light = true} = {}){
+function framedWork(work, cat, {height = 1.1, depth = .05, frame = .06, mat = .1, light = true, maxW = 99} = {}){
   const g = new THREE.Group();
   const photo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({color: '#ddd', roughness: .55, envMapIntensity: .2}));
   const matBoard = new THREE.Mesh(new THREE.BoxGeometry(1, 1, depth * .6), M.mat);
@@ -343,7 +343,8 @@ function framedWork(work, cat, {height = 1.1, depth = .05, frame = .06, mat = .1
   outer.castShadow = true;
   g.add(outer, matBoard, photo);
   const layout = aspect => {
-    const ph = height, pw = height * aspect;
+    let ph = height, pw = height * aspect;
+    if (pw + (mat + frame) * 2 > maxW){ pw = maxW - (mat + frame) * 2; ph = pw / aspect; }
     photo.scale.set(pw, ph, 1); photo.position.z = depth * .62;
     matBoard.scale.set(pw + mat * 2, ph + mat * 2, 1); matBoard.position.z = depth * .26;
     outer.scale.set(pw + (mat + frame) * 2, ph + (mat + frame) * 2, 1);
@@ -400,10 +401,10 @@ function buildCounter(){
   tex('logo/main.png', t => {
     const a = t.image.width / t.image.height, h = 2.25;
     const sign = new THREE.Mesh(new THREE.PlaneGeometry(h * a, h), new THREE.MeshBasicMaterial({map: t, transparent: true, toneMapped: false}));
-    sign.position.set(0, 3.0, -D / 2 + .05); room.add(sign);
+    sign.position.set(0, 3.2, -D / 2 + .05); room.add(sign);
   });
   const spot = new THREE.SpotLight('#fff0d8', 10, 6, .6, .7, 1.3);
-  spot.position.set(0, 4.8, -3.6); spot.target.position.set(0, 3, -D / 2); room.add(spot, spot.target);
+  spot.position.set(0, 4.8, -3.6); spot.target.position.set(0, 3.2, -D / 2); room.add(spot, spot.target);
 
   // counter
   const c = new THREE.Group();
@@ -443,26 +444,27 @@ function buildCounter(){
 
 /* ---------- 展示台（中間三座，放最新作品） ---------- */
 const spinners = [];
-function pedestal(x, z, work, cat, h = .95){
-  const g = new THREE.Group();
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.5, .55, .08, 48), M.gold);
+function pedestal(x, z, work, cat, h = .62){
+  const g = new THREE.Group(), R = .62, DH = 1.62;
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(R + .1, R + .15, .08, 56), M.gold);
   base.position.y = .04; base.castShadow = true; g.add(base);
-  const col = new THREE.Mesh(new THREE.CylinderGeometry(.4, .42, h, 48), M.marble);
+  const col = new THREE.Mesh(new THREE.CylinderGeometry(R - .04, R - .02, h, 56), M.marble);
   col.position.y = h / 2 + .08; col.castShadow = col.receiveShadow = true; g.add(col);
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, .05, 48), M.gold);
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(R + .1, R + .1, .05, 56), M.gold);
   cap.position.y = h + .1; cap.castShadow = true; g.add(cap);
-  const dome = new THREE.Mesh(new THREE.CylinderGeometry(.46, .46, 1.35, 48, 1, true), M.glass);
-  dome.position.y = h + .8; g.add(dome);
-  const domeTop = new THREE.Mesh(new THREE.CylinderGeometry(.48, .48, .03, 48), M.gold);
-  domeTop.position.y = h + 1.48; g.add(domeTop);
+  const dome = new THREE.Mesh(new THREE.CylinderGeometry(R + .04, R + .04, DH, 56, 1, true), M.glass);
+  dome.position.y = h + .12 + DH / 2; g.add(dome);
+  const domeTop = new THREE.Mesh(new THREE.CylinderGeometry(R + .07, R + .07, .03, 56), M.gold);
+  domeTop.position.y = h + .13 + DH; g.add(domeTop);
   if (work){
-    const f = framedWork(work, cat, {height: .78, frame: .035, mat: .05, depth: .035, light: false});
-    const holder = new THREE.Group(); holder.position.y = h + .62; holder.add(f);
-    const back = framedWork(work, cat, {height: .78, frame: .035, mat: .05, depth: .035, light: false});
+    const opt = {height: 1.1, maxW: 1.12, frame: .04, mat: .06, depth: .04, light: false};
+    const f = framedWork(work, cat, opt);
+    const holder = new THREE.Group(); holder.position.y = h + .12 + DH / 2 - .02; holder.add(f);
+    const back = framedWork(work, cat, opt);
     back.rotation.y = Math.PI; holder.add(back);
     g.add(holder); spinners.push(holder);
-    const lbl = plaque(work); lbl.scale.setScalar(.85);
-    lbl.position.set(0, h * .62, .425); lbl.rotation.x = -.05; g.add(lbl);
+    const lbl = plaque(work);
+    lbl.position.set(0, h * .55 + .08, R - .02); g.add(lbl);
   }
   g.position.set(x, 0, z); room.add(g);
   return g;
@@ -501,9 +503,9 @@ function layoutWorks({nails, acc}){
 
   // 中央展示台：最新美甲、最新項鍊、最新耳環
   const latest = t => A.find(w => w.type === t);
-  pedestal(-2.5, 2.4, N[0], 'nails');
-  pedestal(0, 2.0, latest('necklace') || A[0], 'accessories', 1.05);
-  pedestal(2.5, 2.4, latest('earring') || A[1], 'accessories');
+  pedestal(-2.6, 2.4, N[0], 'nails');
+  pedestal(0, 2.0, latest('necklace') || A[0], 'accessories', .5);
+  pedestal(2.6, 2.4, latest('earring') || A[1], 'accessories');
 }
 
 const wallCols = {nails: [], accessories: []};
@@ -684,7 +686,7 @@ renderer.setAnimationLoop(() => {
     if (k >= 1) tween = null;
   }
   if (!reduce){
-    spinners.forEach((s, i) => { s.rotation.y += dt * .35; s.position.y += Math.sin(t * 1.2 + i) * .0006; });
+    spinners.forEach((s, i) => { s.rotation.y = Math.sin(t * .45 + i * 1.7) * .55; });
     sparks.rotation.y = t * .01;
     sparks.material.opacity = .55 + Math.sin(t * 1.6) * .15;
   }
