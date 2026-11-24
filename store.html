@@ -584,7 +584,7 @@ function xmasTree(x, z, s = 1){
     cap.position.copy(o.position); cap.position.y += b * .95; g.add(cap);
   }
   // 暖白小燈（輕輕閃爍）
-  const LN = 200, lights = new THREE.InstancedMesh(new THREE.SphereGeometry(.016, 8, 6), new THREE.MeshBasicMaterial({color: '#ffffff', toneMapped: false}), LN);
+  const LN = 200, lights = new THREE.InstancedMesh(new THREE.SphereGeometry(.02, 8, 6), new THREE.MeshBasicMaterial({color: '#ffffff', toneMapped: false}), LN);
   const base = new THREE.Color('#ffd9a0');
   for (let i = 0; i < LN; i++){
     const y = .75 + Math.pow(r(), .85) * (HT - .4), a = r() * Math.PI * 2;
@@ -592,6 +592,20 @@ function xmasTree(x, z, s = 1){
     lights.setColorAt(i, base); treeLights.push({ph: r() * Math.PI * 2, sp: .8 + r() * 1.6});
   }
   lights.userData.base = base; g.add(lights); g.userData.lights = lights;
+  // 閃亮光暈：每顆燈外圍一圈柔光，跟著燈一起閃
+  const haloPos = new Float32Array(LN * 3), haloCol = new Float32Array(LN * 3), tmp = new THREE.Vector3();
+  for (let i = 0; i < LN; i++){ lights.getMatrixAt(i, m4); tmp.setFromMatrixPosition(m4); haloPos.set([tmp.x, tmp.y, tmp.z], i * 3); }
+  const haloGeo = new THREE.BufferGeometry();
+  haloGeo.setAttribute('position', new THREE.BufferAttribute(haloPos, 3));
+  haloGeo.setAttribute('color', new THREE.BufferAttribute(haloCol, 3));
+  const glintTex = canvasTex(128, 128, (c) => {
+    const gr = c.createRadialGradient(64, 64, 0, 64, 64, 64); gr.addColorStop(0, 'rgba(255,250,235,1)'); gr.addColorStop(.12, 'rgba(255,225,170,.85)'); gr.addColorStop(.4, 'rgba(255,210,150,.18)'); gr.addColorStop(1, 'rgba(255,210,150,0)');
+    c.fillStyle = gr; c.fillRect(0, 0, 128, 128);
+    c.globalCompositeOperation = 'lighter';
+    [[128, 5], [5, 128]].forEach(([w, h]) => { const l = c.createRadialGradient(64, 64, 0, 64, 64, 64); l.addColorStop(0, 'rgba(255,248,225,.95)'); l.addColorStop(1, 'rgba(255,230,180,0)'); c.fillStyle = l; c.fillRect(64 - w / 2, 64 - h / 2, w, h); });
+  });
+  const halos = new THREE.Points(haloGeo, new THREE.PointsMaterial({size: .24, map: glintTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending}));
+  g.add(halos); g.userData.halos = halos;
   const glow = new THREE.PointLight('#ffd6a0', 1.6, 3.2, 1.6); glow.position.y = 1.5; g.add(glow);
   // 頂端金色星星
   const star = new THREE.Shape();
@@ -600,6 +614,8 @@ function xmasTree(x, z, s = 1){
     new THREE.MeshStandardMaterial({color: '#e2c48c', roughness: .2, metalness: .8, emissive: '#ffdca0', emissiveIntensity: .35, envMapIntensity: 1.6}));
   starMesh.geometry.center();
   starMesh.position.set(0, HT + .45, 0); g.add(starMesh); g.userData.star = starMesh;
+  const starGlow = new THREE.Sprite(new THREE.SpriteMaterial({map: sparkTex, color: '#ffe2b0', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending}));
+  starGlow.scale.setScalar(.9); starGlow.position.set(0, HT + .45, .03); g.add(starGlow); g.userData.starGlow = starGlow;
   // 樹下禮物：象牙白／霧粉＋金色緞帶
   [[.62, .3, .22, '#f6f0e6', 0], [-.55, .25, .5, '#ead2c8', .5], [.15, .22, .8, '#f6f0e6', -.3], [-.25, .18, -.72, '#e8dccb', .2]].forEach(([gx, sz, gz, col, rot]) => {
     const gb = new THREE.Group();
@@ -819,8 +835,15 @@ renderer.setAnimationLoop(() => {
     sparks.rotation.y = t * .01;
     sparks.material.opacity = .55 + Math.sin(t * 1.6) * .15;
     const TL = tree.userData.lights;
-    treeLights.forEach((o, i) => { const k = .55 + .45 * Math.sin(t * o.sp + o.ph); TL.setColorAt(i, _tc.copy(TL.userData.base).multiplyScalar(.5 + k * 1.1)); });
-    TL.instanceColor.needsUpdate = true;
+    const HC = tree.userData.halos.geometry.attributes.color;
+    treeLights.forEach((o, i) => {
+      const k = Math.pow(.5 + .5 * Math.sin(t * o.sp * 1.6 + o.ph), 3);
+      TL.setColorAt(i, _tc.copy(TL.userData.base).multiplyScalar(.7 + k * 1.6));
+      HC.setXYZ(i, .25 + k * 1.0, .2 + k * .82, .12 + k * .55);
+    });
+    TL.instanceColor.needsUpdate = true; HC.needsUpdate = true;
+    tree.userData.starGlow.material.opacity = .55 + .35 * Math.sin(t * 2.2);
+    tree.userData.starGlow.scale.setScalar(.8 + .12 * Math.sin(t * 2.2));
     tree.userData.star.rotation.y = Math.sin(t * .6) * .35;
   }
   // keep the orbit target inside the room
