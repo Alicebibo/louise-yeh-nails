@@ -584,11 +584,14 @@ function xmasTree(x, z, s = 1){
     cap.position.copy(o.position); cap.position.y += b * .95; g.add(cap);
   }
   // 暖白小燈（輕輕閃爍）
-  const LN = 200, lights = new THREE.InstancedMesh(new THREE.SphereGeometry(.02, 8, 6), new THREE.MeshBasicMaterial({color: '#ffffff', toneMapped: false}), LN);
+  const RN = 230, SN = 170, LN = RN + SN;   // 散落小燈＋一條螺旋燈串
+  const lights = new THREE.InstancedMesh(new THREE.SphereGeometry(.02, 8, 6), new THREE.MeshBasicMaterial({color: '#ffffff', toneMapped: false}), LN);
   const base = new THREE.Color('#ffd9a0');
   for (let i = 0; i < LN; i++){
-    const y = .75 + Math.pow(r(), .85) * (HT - .4), a = r() * Math.PI * 2;
-    m4.compose(surf(y, a, 1.05), q, sc.setScalar(1)); lights.setMatrixAt(i, m4);
+    let p;
+    if (i < RN){ p = surf(.75 + Math.pow(r(), .85) * (HT - .4), r() * Math.PI * 2, 1.05); }
+    else { const k = (i - RN) / SN; p = surf(.78 + k * (HT - .5), k * Math.PI * 2 * 4.2 + .6, 1.075); }
+    m4.compose(p, q, sc.setScalar(1)); lights.setMatrixAt(i, m4);
     lights.setColorAt(i, base); treeLights.push({ph: r() * Math.PI * 2, sp: .8 + r() * 1.6});
   }
   lights.userData.base = base; g.add(lights); g.userData.lights = lights;
@@ -616,16 +619,78 @@ function xmasTree(x, z, s = 1){
   starMesh.position.set(0, HT + .45, 0); g.add(starMesh); g.userData.star = starMesh;
   const starGlow = new THREE.Sprite(new THREE.SpriteMaterial({map: sparkTex, color: '#ffe2b0', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending}));
   starGlow.scale.setScalar(.9); starGlow.position.set(0, HT + .45, .03); g.add(starGlow); g.userData.starGlow = starGlow;
-  // 樹下禮物：象牙白／霧粉＋金色緞帶
-  [[.62, .3, .22, '#f6f0e6', 0], [-.55, .25, .5, '#ead2c8', .5], [.15, .22, .8, '#f6f0e6', -.3], [-.25, .18, -.72, '#e8dccb', .2]].forEach(([gx, sz, gz, col, rot]) => {
+  // 樹下禮物：每個包裝都不同（條紋、點點、菱格、金箔、絨面、帽盒）
+  const wrap = {
+    stripe: canvasTex(256, 256, (c) => { c.fillStyle = '#f7f1e7'; c.fillRect(0, 0, 256, 256); c.fillStyle = '#d6b884'; for (let i = 0; i < 256; i += 32) c.fillRect(i, 0, 5, 256); c.fillStyle = 'rgba(214,184,132,.45)'; for (let i = 16; i < 256; i += 32) c.fillRect(i, 0, 1.5, 256); }, [1, 1]),
+    dots: canvasTex(256, 256, (c) => { c.fillStyle = '#ecd3ca'; c.fillRect(0, 0, 256, 256); c.fillStyle = '#d9bb85'; for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++){ c.beginPath(); c.arc(x * 32 + (y % 2) * 16 + 8, y * 32 + 16, 6, 0, 7); c.fill(); } }, [1.2, 1.2]),
+    lattice: canvasTex(256, 256, (c) => { c.fillStyle = '#fbf7f0'; c.fillRect(0, 0, 256, 256); c.strokeStyle = '#c4a26c'; c.lineWidth = 3; for (let i = -256; i < 512; i += 42){ c.beginPath(); c.moveTo(i, 0); c.lineTo(i + 256, 256); c.stroke(); c.beginPath(); c.moveTo(i, 256); c.lineTo(i + 256, 0); c.stroke(); } c.fillStyle = '#d9bd8a'; for (let y = 0; y < 256; y += 42) for (let x = 0; x < 256; x += 42){ c.beginPath(); c.arc(x + 21, y + 21, 2.5, 0, 7); c.fill(); } }, [1, 1]),
+    snow: canvasTex(256, 256, (c) => { c.fillStyle = '#7f927c'; c.fillRect(0, 0, 256, 256); c.strokeStyle = '#efe2c4'; c.lineWidth = 1.6; const rr = rnd(9); for (let k = 0; k < 14; k++){ const x = rr() * 256, y = rr() * 256, s = 6 + rr() * 6; for (let a = 0; a < 3; a++){ const t = a * Math.PI / 3; c.beginPath(); c.moveTo(x - Math.cos(t) * s, y - Math.sin(t) * s); c.lineTo(x + Math.cos(t) * s, y + Math.sin(t) * s); c.stroke(); } } }, [1, 1]),
+    check: canvasTex(256, 256, (c) => { c.fillStyle = '#e9dccb'; c.fillRect(0, 0, 256, 256); c.fillStyle = 'rgba(176,144,104,.35)'; for (let i = 0; i < 256; i += 64){ c.fillRect(i, 0, 22, 256); c.fillRect(0, i, 256, 22); } c.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 30; i < 256; i += 64){ c.fillRect(i, 0, 2, 256); c.fillRect(0, i, 256, 2); } }, [2, 2]),
+  };
+  const P = {
+    stripe: new THREE.MeshStandardMaterial({map: wrap.stripe, roughness: .5}),
+    dots: new THREE.MeshStandardMaterial({map: wrap.dots, roughness: .55}),
+    lattice: new THREE.MeshStandardMaterial({map: wrap.lattice, roughness: .45}),
+    snow: new THREE.MeshStandardMaterial({map: wrap.snow, roughness: .8}),
+    check: new THREE.MeshStandardMaterial({map: wrap.check, roughness: .7}),
+    foil: new THREE.MeshStandardMaterial({color: '#dcc08c', roughness: .28, metalness: .75, envMapIntensity: 1.5}),
+    rose: new THREE.MeshStandardMaterial({color: '#d9b0a2', roughness: .3, metalness: .55, envMapIntensity: 1.3}),
+    velvet: new THREE.MeshStandardMaterial({color: '#e6c7c0', roughness: 1}),
+    pearlW: new THREE.MeshPhysicalMaterial({color: '#faf6ef', roughness: .3, clearcoat: .6, sheen: 1, sheenColor: new THREE.Color('#ffeedd')}),
+    mocha: new THREE.MeshStandardMaterial({color: '#a68b74', roughness: .75}),
+  };
+  const RB = {
+    gold: M.gold,
+    ivory: new THREE.MeshPhysicalMaterial({color: '#fbf6ec', roughness: .35, sheen: 1, sheenColor: new THREE.Color('#ffffff')}),
+    blush: new THREE.MeshPhysicalMaterial({color: '#e8c3b8', roughness: .4, sheen: 1, sheenColor: new THREE.Color('#fff0ea')}),
+    sage: new THREE.MeshStandardMaterial({color: '#879a80', roughness: .6}),
+  };
+  function bowOn(gb, top, rib, big){
+    const n = big ? 4 : 2, sz = big ? .055 : .042;
+    for (let i = 0; i < n; i++){
+      const loop = new THREE.Mesh(new THREE.TorusGeometry(sz, .013, 6, 18), rib);
+      loop.scale.set(1.1, .8, 1);
+      const a = i * Math.PI * 2 / n + Math.PI / 4; loop.rotation.order = 'YZX'; loop.rotation.y = -a; loop.rotation.z = .45; loop.position.y = top + sz * .55; loop.position.x = Math.cos(a) * sz * .95; loop.position.z = Math.sin(a) * sz * .95;
+      gb.add(loop);
+    }
+    const knot = new THREE.Mesh(new THREE.SphereGeometry(.02, 10, 8), rib); knot.position.y = top + .03; gb.add(knot);
+  }
+  function giftBox(w, h, d, paper, rib, {big = false, single = false, tag = false} = {}){
     const gb = new THREE.Group();
-    const bx = new THREE.Mesh(new RoundedBoxGeometry(sz * 1.2, sz, sz, 2, .012), new THREE.MeshStandardMaterial({color: col, roughness: .55}));
-    bx.position.y = sz / 2; bx.castShadow = bx.receiveShadow = true; gb.add(bx);
-    const r1 = new THREE.Mesh(new THREE.BoxGeometry(sz * 1.22, sz * 1.01, .03), M.gold); r1.position.y = sz / 2; gb.add(r1);
-    const r2 = new THREE.Mesh(new THREE.BoxGeometry(.03, sz * 1.01, sz * 1.01), M.gold); r2.position.y = sz / 2; gb.add(r2);
-    [-1, 1].forEach(d => { const bow = new THREE.Mesh(new THREE.TorusGeometry(.04, .012, 6, 16), M.gold); bow.position.set(d * .035, sz + .03, 0); bow.rotation.y = Math.PI / 2; bow.rotation.x = d * .5; gb.add(bow); });
-    gb.position.set(gx, 0, gz); gb.rotation.y = rot; g.add(gb);
-  });
+    const bx = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 2, .01), paper); bx.position.y = h / 2; bx.castShadow = bx.receiveShadow = true; gb.add(bx);
+    const lid = new THREE.Mesh(new RoundedBoxGeometry(w * 1.03, h * .16, d * 1.03, 2, .008), paper); lid.position.y = h - h * .07; gb.add(lid);
+    const r1 = new THREE.Mesh(new THREE.BoxGeometry(w * 1.04, h * 1.005, .026), rib); r1.position.y = h / 2; gb.add(r1);
+    if (!single){ const r2 = new THREE.Mesh(new THREE.BoxGeometry(.026, h * 1.005, d * 1.04), rib); r2.position.y = h / 2; gb.add(r2); }
+    bowOn(gb, h, rib, big);
+    if (tag){ const t = new THREE.Mesh(new THREE.BoxGeometry(.06, .035, .003), RB.ivory); t.position.set(w * .3, h + .005, d * .2); t.rotation.x = -Math.PI / 2; t.rotation.z = .4; gb.add(t); }
+    return gb;
+  }
+  function hatBox(rad, h, paper, rib){
+    const gb = new THREE.Group();
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, h, 40), paper); b.position.y = h / 2; b.castShadow = b.receiveShadow = true; gb.add(b);
+    const lid = new THREE.Mesh(new THREE.CylinderGeometry(rad * 1.04, rad * 1.04, h * .18, 40), paper); lid.position.y = h - h * .08; gb.add(lid);
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(rad * 1.045, rad * 1.045, .03, 40, 1, true), rib); band.position.y = h * .45; gb.add(band);
+    for (let i = 0; i < 26; i++){ const a = i / 26 * Math.PI * 2, p = new THREE.Mesh(new THREE.SphereGeometry(.012, 8, 6), RB.ivory); p.position.set(Math.cos(a) * rad * 1.05, h - h * .08, Math.sin(a) * rad * 1.05); gb.add(p); }
+    bowOn(gb, h, rib, true);
+    return gb;
+  }
+  const gifts = [
+    // [物件, x, z, 旋轉]
+    [giftBox(.4, .32, .34, P.stripe, RB.gold, {big: true, tag: true}), .78, .5, .15],
+    [giftBox(.32, .28, .32, P.dots, RB.ivory, {big: true}), -.78, .72, .5],
+    [hatBox(.17, .26, P.pearlW, RB.blush), .22, 1.1, 0],
+    [giftBox(.24, .2, .24, P.foil, RB.ivory, {single: true}), -.25, 1.22, -.4],
+    [giftBox(.2, .42, .2, P.velvet, RB.gold, {big: true}), -1.1, .25, .3],
+    [giftBox(.5, .14, .3, P.lattice, RB.gold, {single: true, tag: true}), .7, 1.0, -.25],
+    [giftBox(.28, .26, .28, P.snow, RB.gold, {big: true}), -.92, -.3, .2],
+    [giftBox(.18, .16, .18, P.rose, RB.ivory), 1.08, .85, .6],
+    [giftBox(.3, .22, .26, P.check, RB.sage, {tag: true}), .9, -.15, -.3],
+    [giftBox(.16, .14, .16, P.mocha, RB.ivory, {big: true}), -1.2, .85, -.2],
+    [giftBox(.2, .17, .2, P.pearlW, RB.gold), -.5, 1.05, .7],
+  ];
+  gifts.forEach(([o, gx, gz, rot]) => { o.position.set(gx, 0, gz); o.rotation.y = rot; g.add(o); });
+  // 疊放：小禮物放在條紋大禮物上
+  const top = giftBox(.18, .14, .18, P.foil, RB.blush, {single: true}); top.position.set(.76, .32, .5); top.rotation.y = .6; g.add(top);
   g.scale.setScalar(s); g.position.set(x, 0, z); room.add(g);
   return g;
 }
