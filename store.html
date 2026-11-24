@@ -9,11 +9,11 @@
 <meta property="og:title" content="LuLu’s Handmade｜3D 展示店">
 <meta property="og:description" content="走進 LuLu’s Handmade 的 3D 展示店面，360° 欣賞手作美甲片與飾品創作。">
 <meta property="og:url" content="https://alicebibo.github.io/louise-yeh-nails/store.html">
-<meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123b">
+<meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261124a">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261123b">
+<meta name="twitter:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261124a">
 <link rel="icon" type="image/png" sizes="32x32" href="logo/icon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -487,6 +487,97 @@ function plant(x, z, s = 1){
   g.scale.setScalar(s); g.position.set(x, 0, z); room.add(g);
 }
 
+
+/* ---------- 聖誕樹（霧綠枝葉＋香檳金、珍珠、暖光） ---------- */
+const treeLights = [];
+function xmasTree(x, z, s = 1){
+  const g = new THREE.Group(), r = rnd(2024);
+  const HT = 2.7, R0 = .95;
+  const radiusAt = y => R0 * (1 - (y - .55) / HT);
+  // 盆器：象牙白溝紋盆＋金邊
+  const pot = new THREE.Mesh(new THREE.CylinderGeometry(.42, .34, .5, 40), M.white);
+  pot.position.y = .25; pot.castShadow = pot.receiveShadow = true; g.add(pot);
+  for (let i = 0; i < 24; i++){
+    const a = i / 24 * Math.PI * 2;
+    const fl = new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .46, 8), M.white);
+    fl.position.set(Math.cos(a) * .385, .25, Math.sin(a) * .385); g.add(fl);
+  }
+  [[.5, .42], [.03, .34]].forEach(([y, rr]) => { const ring = new THREE.Mesh(new THREE.TorusGeometry(rr, .016, 8, 48), M.gold); ring.rotation.x = Math.PI / 2; ring.position.y = y; g.add(ring); });
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.05, .07, .5, 12), M.wood); trunk.position.y = .6; g.add(trunk);
+  // 枝葉：分層圓錐＋細枝簇
+  const needle = new THREE.MeshStandardMaterial({color: '#4c6150', roughness: .9, envMapIntensity: .3, side: THREE.DoubleSide});
+  const needle2 = new THREE.MeshStandardMaterial({color: '#ffffff', roughness: .8, envMapIntensity: .4});
+  const tiers = 6;
+  for (let i = 0; i < tiers; i++){
+    const y0 = .6 + i * (HT - .5) / tiers, hh = (HT - .3) / tiers * 1.55;
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(radiusAt(y0) * 1.02, hh, 28, 1, true), needle);
+    cone.position.y = y0 + hh / 2; cone.castShadow = true; g.add(cone);
+  }
+  const TUFT = 1800;
+  const tufts = new THREE.InstancedMesh(new THREE.ConeGeometry(.028, .17, 4), needle2, TUFT);
+  const tuftCols = ['#5d7660', '#6c8569', '#7b9277', '#55705a', '#86997f'].map(c => new THREE.Color(c));
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), sc = new THREE.Vector3();
+  for (let i = 0; i < TUFT; i++){
+    const y = .7 + Math.pow(r(), .8) * (HT - .25), a = r() * Math.PI * 2, rr = Math.max(.04, radiusAt(y)) * (.8 + r() * .26);
+    v.set(Math.cos(a) * rr, y, Math.sin(a) * rr);
+    e.set(0, -a, -Math.PI / 2 - .5 + r() * .3); q.setFromEuler(e);
+    sc.setScalar(.7 + r() * .7); m4.compose(v, q, sc); tufts.setMatrixAt(i, m4); tufts.setColorAt(i, tuftCols[Math.floor(r() * tuftCols.length)]);
+  }
+  tufts.castShadow = true; g.add(tufts);
+  const surf = (y, a, out = 1.04) => { const rr = Math.max(.04, radiusAt(y)) * out; return new THREE.Vector3(Math.cos(a) * rr, y, Math.sin(a) * rr); };
+  // 香檳金緞帶螺旋
+  const ribPts = []; for (let i = 0; i <= 240; i++){ const k = i / 240; ribPts.push(surf(.75 + k * (HT - .45), k * Math.PI * 2 * 3.2, 1.07)); }
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(ribPts), 480, .022, 6, false), M.gold));
+  // 珍珠串（反向螺旋）
+  const pearl = new THREE.MeshPhysicalMaterial({color: '#fbf6ee', roughness: .22, clearcoat: 1, clearcoatRoughness: .15, sheen: 1, sheenColor: new THREE.Color('#ffe9d0'), envMapIntensity: 1.2});
+  const PN = 150, pearls = new THREE.InstancedMesh(new THREE.SphereGeometry(.022, 12, 10), pearl, PN);
+  q.identity();
+  for (let i = 0; i < PN; i++){ const k = i / PN; m4.compose(surf(.8 + k * (HT - .6), -k * Math.PI * 2 * 2.6 + 1.3, 1.06), q, sc.setScalar(1)); pearls.setMatrixAt(i, m4); }
+  g.add(pearls);
+  // 吊飾球：象牙白、香檳金、霧粉
+  const balls = [
+    new THREE.MeshPhysicalMaterial({color: '#f7f1e6', roughness: .2, clearcoat: 1, envMapIntensity: 1.1}),
+    new THREE.MeshStandardMaterial({color: '#d9bd86', roughness: .25, metalness: .7, envMapIntensity: 1.5}),
+    new THREE.MeshPhysicalMaterial({color: '#e9c9c0', roughness: .3, clearcoat: .8, envMapIntensity: 1}),
+  ];
+  for (let i = 0; i < 34; i++){
+    const y = .85 + r() * (HT - .7), a = r() * Math.PI * 2, b = .045 + r() * .035 * (1 - (y - .8) / HT);
+    const o = new THREE.Mesh(new THREE.SphereGeometry(b, 20, 14), balls[i % 3]);
+    o.position.copy(surf(y, a, 1.08)); o.castShadow = true; g.add(o);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(b * .28, b * .28, b * .3, 10), M.gold);
+    cap.position.copy(o.position); cap.position.y += b * .95; g.add(cap);
+  }
+  // 暖白小燈（輕輕閃爍）
+  const LN = 110, lights = new THREE.InstancedMesh(new THREE.SphereGeometry(.016, 8, 6), new THREE.MeshBasicMaterial({color: '#ffffff', toneMapped: false}), LN);
+  const base = new THREE.Color('#ffd9a0');
+  for (let i = 0; i < LN; i++){
+    const y = .75 + Math.pow(r(), .85) * (HT - .4), a = r() * Math.PI * 2;
+    m4.compose(surf(y, a, 1.05), q, sc.setScalar(1)); lights.setMatrixAt(i, m4);
+    lights.setColorAt(i, base); treeLights.push({ph: r() * Math.PI * 2, sp: .8 + r() * 1.6});
+  }
+  lights.userData.base = base; g.add(lights); g.userData.lights = lights;
+  const glow = new THREE.PointLight('#ffd6a0', 1.6, 3.2, 1.6); glow.position.y = 1.5; g.add(glow);
+  // 頂端金色星星
+  const star = new THREE.Shape();
+  for (let i = 0; i < 10; i++){ const a = Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? .07 : .17; if (i) star.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); else star.moveTo(Math.cos(a) * rr, Math.sin(a) * rr); }
+  const starMesh = new THREE.Mesh(new THREE.ExtrudeGeometry(star, {depth: .04, bevelEnabled: true, bevelThickness: .015, bevelSize: .012, bevelSegments: 2}),
+    new THREE.MeshStandardMaterial({color: '#e2c48c', roughness: .2, metalness: .8, emissive: '#ffdca0', emissiveIntensity: .35, envMapIntensity: 1.6}));
+  starMesh.geometry.center();
+  starMesh.position.set(0, HT + .45, 0); g.add(starMesh); g.userData.star = starMesh;
+  // 樹下禮物：象牙白／霧粉＋金色緞帶
+  [[.62, .3, .22, '#f6f0e6', 0], [-.55, .25, .5, '#ead2c8', .5], [.15, .22, .8, '#f6f0e6', -.3], [-.25, .18, -.72, '#e8dccb', .2]].forEach(([gx, sz, gz, col, rot]) => {
+    const gb = new THREE.Group();
+    const bx = new THREE.Mesh(new RoundedBoxGeometry(sz * 1.2, sz, sz, 2, .012), new THREE.MeshStandardMaterial({color: col, roughness: .55}));
+    bx.position.y = sz / 2; bx.castShadow = bx.receiveShadow = true; gb.add(bx);
+    const r1 = new THREE.Mesh(new THREE.BoxGeometry(sz * 1.22, sz * 1.01, .03), M.gold); r1.position.y = sz / 2; gb.add(r1);
+    const r2 = new THREE.Mesh(new THREE.BoxGeometry(.03, sz * 1.01, sz * 1.01), M.gold); r2.position.y = sz / 2; gb.add(r2);
+    [-1, 1].forEach(d => { const bow = new THREE.Mesh(new THREE.TorusGeometry(.04, .012, 6, 16), M.gold); bow.position.set(d * .035, sz + .03, 0); bow.rotation.y = Math.PI / 2; bow.rotation.x = d * .5; gb.add(bow); });
+    gb.position.set(gx, 0, gz); gb.rotation.y = rot; g.add(gb);
+  });
+  g.scale.setScalar(s); g.position.set(x, 0, z); room.add(g);
+  return g;
+}
+
 /* ---------- 擺放作品 ---------- */
 function layoutWorks({nails, acc}){
   const latestFirst = list => list.slice().reverse();
@@ -660,6 +751,7 @@ addEventListener('resize', resize); resize();
 buildCounter();
 plant(-W / 2 + .7, -D / 2 + .7, 1.15); plant(W / 2 - .7, -D / 2 + .7, 1.15);
 plant(-W / 2 + .7, D / 2 - 1.2, .95); plant(W / 2 - .7, D / 2 - 1.2, .95);
+const tree = xmasTree(-3.05, -5.0, 1);
 
 const start = views.overview;
 camera.position.set(start.pos[0], start.pos[1] + 1.2, start.pos[2] + 3);
@@ -676,6 +768,7 @@ loadingManager.onLoad = () => {
 setTimeout(() => { if (!$('loader').classList.contains('done')){ $('loader').classList.add('done'); flyTo(start.pos, start.target, 2); } }, 9000);
 
 const clock = new THREE.Clock();
+const _tc = new THREE.Color();
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 renderer.setAnimationLoop(() => {
   const dt = clock.getDelta(), t = clock.elapsedTime;
@@ -689,6 +782,10 @@ renderer.setAnimationLoop(() => {
     spinners.forEach((s, i) => { s.rotation.y = Math.sin(t * .45 + i * 1.7) * .55; });
     sparks.rotation.y = t * .01;
     sparks.material.opacity = .55 + Math.sin(t * 1.6) * .15;
+    const TL = tree.userData.lights;
+    treeLights.forEach((o, i) => { const k = .55 + .45 * Math.sin(t * o.sp + o.ph); TL.setColorAt(i, _tc.copy(TL.userData.base).multiplyScalar(.5 + k * 1.1)); });
+    TL.instanceColor.needsUpdate = true;
+    tree.userData.star.rotation.y = Math.sin(t * .6) * .35;
   }
   // keep the orbit target inside the room
   controls.target.x = THREE.MathUtils.clamp(controls.target.x, -W / 2 + .5, W / 2 - .5);
