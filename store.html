@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LuLu’s Handmade 3D 展示店</title>
-<meta name="description" content="走進 LuLu’s Handmade 的 3D 展示店面，360° 欣賞手作美甲片與飾品創作。">
+<meta name="description" content="來到 LuLu’s Handmade 的 3D 小店門口，推開店門走進展示店，360° 欣賞手作美甲片與飾品創作。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LuLu’s Handmade｜3D 展示店">
-<meta property="og:description" content="走進 LuLu’s Handmade 的 3D 展示店面，360° 欣賞手作美甲片與飾品創作。">
+<meta property="og:description" content="來到 LuLu’s Handmade 的 3D 小店門口，推開店門走進展示店，360° 欣賞手作美甲片與飾品創作。">
 <meta property="og:url" content="https://alicebibo.github.io/louise-yeh-nails/store.html">
 <meta property="og:image" content="https://alicebibo.github.io/louise-yeh-nails/og-store.jpg?v=20261124b">
 <meta property="og:image:width" content="1200">
@@ -28,8 +28,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 #scene{position:fixed;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 #scene.hover{cursor:pointer}
 #scene:active{cursor:grabbing}
-
-/* top bar */
 .top{position:fixed;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;pointer-events:none;z-index:5}
 .brand{display:flex;align-items:center;gap:12px;pointer-events:auto;text-decoration:none;color:inherit;background:rgba(254,253,251,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:6px 18px 6px 8px;box-shadow:0 8px 24px -16px rgba(70,62,54,.5)}
 .brand img{height:40px;width:auto}
@@ -37,8 +35,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .brand i{font-family:"Bodoni Moda",serif;font-size:13px;color:var(--rose-deep);display:block;line-height:1.2}
 .back{pointer-events:auto;font-size:13px;letter-spacing:.12em;color:var(--rose-deep);text-decoration:none;background:rgba(254,253,251,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px;white-space:nowrap}
 .back:hover{background:var(--paper)}
-
-/* bottom nav */
 .nav{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:6px;padding:6px;background:rgba(254,253,251,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 30px -18px rgba(70,62,54,.55);z-index:5;max-width:calc(100% - 32px);overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav button{font:inherit;font-size:14px;letter-spacing:.1em;border:0;background:transparent;color:var(--ink);padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.25s}
@@ -46,34 +42,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .nav button:hover{background:var(--rose-soft)}
 .nav button[aria-pressed="true"]{background:var(--rose-deep);color:#fff}
 .nav button[aria-pressed="true"] .en{color:rgba(255,255,255,.75)}
-.pager{position:fixed;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:rgba(254,253,251,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 24px -14px rgba(70,62,54,.6);color:var(--rose-deep);font-size:26px;line-height:1;cursor:pointer;z-index:6;display:none;align-items:center;justify-content:center;transition:background .2s,opacity .2s}
-.pager:hover{background:var(--paper)}
-.pager:disabled{opacity:.3;cursor:default}
-.pager.prev{left:14px}.pager.next{right:14px}
-body.wall-mode .pager{display:flex}
-body.panel-open .pager.next{right:calc(min(400px,92vw) + 14px)}
-.counter{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);font-family:"Bodoni Moda",serif;font-size:13px;letter-spacing:.2em;color:var(--rose-deep);background:rgba(254,253,251,.8);padding:5px 14px;border-radius:999px;z-index:4;display:none}
-body.wall-mode .counter{display:block}
+.nav button.enter{background:linear-gradient(135deg,#c9ab7a,#a8895c);color:#fff}
+.nav button.enter .en{color:rgba(255,255,255,.8)}
 .hint{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);font-size:12px;letter-spacing:.14em;color:var(--muted);background:rgba(254,253,251,.7);padding:6px 14px;border-radius:999px;z-index:4;white-space:nowrap;transition:opacity .6s;pointer-events:none}
 .hint.off{opacity:0}
-
-/* detail panel */
-.panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:var(--paper);border-left:1px solid var(--line);box-shadow:-20px 0 50px -30px rgba(70,62,54,.5);transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1);z-index:8;display:flex;flex-direction:column;overflow:auto}
-.panel.open{transform:none}
-.panel .ph{background:var(--pearl);padding:28px 28px 0}
-.panel .ph img{width:100%;display:block;border-radius:6px;box-shadow:0 14px 30px -18px rgba(70,62,54,.5)}
-.panel .bd{padding:24px 30px 34px}
-.panel .no{font-family:"Bodoni Moda",serif;font-size:13px;letter-spacing:.2em;color:var(--rose-deep)}
-.panel h2{font-family:"Noto Serif TC",serif;font-weight:700;font-size:26px;line-height:1.3;margin-top:8px}
-.panel .en{font-family:"Bodoni Moda",serif;font-style:italic;font-size:17px;color:var(--muted);margin-top:4px}
-.panel .media{font-size:13px;letter-spacing:.12em;color:var(--muted);margin-top:14px}
-.panel p{font-size:15px;line-height:1.9;margin-top:16px;color:#4a423c}
-.panel ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.panel li{font-size:13px;border:1px solid var(--line);background:var(--pearl);color:var(--rose-deep);padding:5px 12px;border-radius:999px}
-.panel .go{display:inline-block;margin-top:24px;font-size:14px;letter-spacing:.14em;color:#fff;background:var(--rose-deep);padding:11px 22px;border-radius:999px;text-decoration:none}
-.panel .x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(254,253,251,.9);font-size:20px;line-height:1;color:var(--ink);cursor:pointer}
-
-/* loader */
+/* 店門上的「點我進店」標籤 */
+.doortag{text-decoration:none;position:fixed;left:0;top:0;transform:translate(-50%,-100%);z-index:4;pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:opacity .4s}
+.doortag span{font-size:13px;letter-spacing:.16em;color:#fff;background:linear-gradient(135deg,#c9ab7a,#a8895c);padding:8px 16px;border-radius:999px;box-shadow:0 10px 22px -10px rgba(120,90,50,.7);white-space:nowrap}
+.doortag em{font-family:"Bodoni Moda",serif;font-size:12px;color:#fff;opacity:.85;margin-left:6px}
+.doortag i{width:1px;height:40px;background:linear-gradient(#c9ab7a,transparent)}
+.doortag{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{margin-top:-6px}}
+.doortag.off{opacity:0;pointer-events:none}
+.fade{position:fixed;inset:0;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .7s;z-index:15}
+.fade.on{opacity:1}
 .loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);z-index:20;transition:opacity .8s}
 .loader.done{opacity:0;pointer-events:none}
 .loader img{height:150px;animation:breathe 2.4s ease-in-out infinite}
@@ -82,7 +64,6 @@ body.wall-mode .counter{display:block}
 .loader span{font-size:12px;letter-spacing:.3em;color:var(--muted)}
 @keyframes breathe{50%{transform:scale(1.04);opacity:.85}}
 .err{display:none;position:fixed;inset:0;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:21;background:var(--bg);font-size:15px;line-height:1.9}
-
 @media (max-width:640px){
   .top{padding:12px 16px}
   .brand{padding:4px 14px 4px 6px}
@@ -94,52 +75,26 @@ body.wall-mode .counter{display:block}
   .nav button{padding:8px 12px;font-size:13px}
   .nav button .en{display:none}
   .hint{bottom:70px;font-size:11px}
-  .counter{bottom:70px}
-  .pager{width:44px;height:44px;font-size:22px}
-  body.panel-open .pager{display:none}
-  .panel{top:auto;bottom:0;height:auto;max-height:82vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(105%)}
-  .panel .ph{padding:20px 20px 0;display:flex;justify-content:center}
-  .panel .ph img{width:auto;max-width:100%;max-height:36vh}
-  .panel .bd{padding:18px 22px 28px}
-  .panel h2{font-size:22px}
 }
-@media (prefers-reduced-motion:reduce){.loader img{animation:none}}
+@media (prefers-reduced-motion:reduce){.loader img,.doortag{animation:none}}
 </style>
 </head>
 <body>
-<canvas id="scene" aria-label="LuLu’s Handmade 3D 展示店面"></canvas>
-
+<canvas id="scene" aria-label="LuLu’s Handmade 3D 小店外觀"></canvas>
 <header class="top">
   <a class="brand" href="index.html"><img src="logo/emblem.png" alt=""><span><b>LuLu’s Handmade</b><i>3D Showroom</i></span></a>
   <a class="back" href="index.html">← 回作品集</a>
 </header>
-
-<nav class="nav" aria-label="店面導覽">
-  <button data-view="overview" aria-pressed="true">全景<span class="en">Overview</span></button>
-  <button data-view="nails" aria-pressed="false">美甲片牆<span class="en">Nails</span></button>
-  <button data-view="acc" aria-pressed="false">飾品牆<span class="en">Jewelry</span></button>
-  <button data-view="counter" aria-pressed="false">櫃台<span class="en">Counter</span></button>
+<nav class="nav" aria-label="店門口導覽">
+  <button data-view="front" aria-pressed="true">店門口<span class="en">Storefront</span></button>
+  <button data-view="window" aria-pressed="false">櫥窗<span class="en">Windows</span></button>
+  <button data-view="tree" aria-pressed="false">聖誕樹<span class="en">Christmas</span></button>
+  <button class="enter" id="enterBtn">走進展示店<span class="en">Step inside →</span></button>
 </nav>
-<button class="pager prev" id="prev" aria-label="上一幅">‹</button>
-<button class="pager next" id="next" aria-label="下一幅">›</button>
-<div class="counter" id="counter"></div>
-<div class="hint" id="hint">拖曳轉動視角 · 滾輪或雙指縮放 · 點作品看介紹</div>
-
-<aside class="panel" id="panel" aria-hidden="true">
-  <button class="x" id="close" aria-label="關閉">×</button>
-  <div class="ph"><img id="p-img" alt=""></div>
-  <div class="bd">
-    <div class="no" id="p-no"></div>
-    <h2 id="p-title"></h2>
-    <div class="en" id="p-en"></div>
-    <div class="media" id="p-media"></div>
-    <p id="p-desc"></p>
-    <ul id="p-details"></ul>
-    <a class="go" id="p-go" href="index.html">在作品集查看 →</a>
-  </div>
-</aside>
-
-<div class="loader" id="loader"><img src="logo/main.png" alt="LuLu’s Handmade"><div class="bar"><i id="bar"></i></div><span>店面佈置中</span></div>
+<a class="doortag off" id="doortag" href="showroom.html"><span>推開店門 進入展示店<em>Enter</em></span><i></i></a>
+<div class="hint" id="hint">拖曳轉動視角 · 滾輪或雙指縮放 · 點店門走進展示店</div>
+<div class="fade" id="fade"></div>
+<div class="loader" id="loader"><img src="logo/main.png" alt="LuLu’s Handmade"><div class="bar"><i id="bar"></i></div><span>小店開門中</span></div>
 <div class="err" id="err">這個瀏覽器無法顯示 3D 店面。<br>請改用最新版 Chrome、Safari 或 Edge 開啟，<br>或 <a href="index.html">回作品集</a> 瀏覽作品。</div>
 
 <script type="importmap">
@@ -157,13 +112,9 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 const $ = id => document.getElementById(id);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- 作品資料：直接讀作品集頁裡的清單，新增作品會自動出現在店裡 ---------- */
 async function loadWorks(){
   const html = await (await fetch('index.html', {cache:'no-cache'})).text();
-  const grab = name => {
-    const m = html.match(new RegExp('const ' + name + ' = (\\[[\\s\\S]*?\\n\\]);'));
-    return m ? new Function('return ' + m[1])() : [];
-  };
+  const grab = name => { const m = html.match(new RegExp('const ' + name + ' = (\\[[\\s\\S]*?\\n\\]);')); return m ? new Function('return ' + m[1])() : []; };
   return { nails: grab('NAILS'), acc: grab('ACCESSORIES') };
 }
 
@@ -175,318 +126,327 @@ catch(e){ $('err').style.display='flex'; $('loader').classList.add('done'); thro
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.12;
+renderer.toneMappingExposure = .96;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#efe9e1');
-scene.fog = new THREE.Fog('#efe9e1', 16, 30);
+scene.background = new THREE.Color('#f3eee7');
+scene.fog = new THREE.Fog('#f3eee7', 34, 60);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 120);
 const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.minDistance = 1.6;
-controls.maxDistance = 11;
-controls.maxPolarAngle = Math.PI * 0.53;
-controls.minPolarAngle = Math.PI * 0.18;
-controls.enablePan = false;
-controls.rotateSpeed = 0.6;
+controls.enableDamping = true; controls.dampingFactor = .08;
+controls.minDistance = 5; controls.maxDistance = 42;
+controls.maxPolarAngle = Math.PI * .47; controls.minPolarAngle = Math.PI * .12;
+controls.enablePan = false; controls.rotateSpeed = .6;
 
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onProgress = (u, a, b) => { $('bar').style.width = (a / b * 100) + '%'; };
 const texLoader = new THREE.TextureLoader(loadingManager);
 const maxAniso = renderer.capabilities.getMaxAnisotropy();
-function tex(url, cb){
-  return texLoader.load(url, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; cb && cb(t); });
-}
-
-/* ---------- 程式產生的材質（木地板、牆面、文字） ---------- */
+function tex(url, cb){ return texLoader.load(url, t => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; cb && cb(t); }); }
 function canvasTex(w, h, draw, repeat){
   const c = document.createElement('canvas'); c.width = w; c.height = h;
   draw(c.getContext('2d'), w, h);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
   if (repeat){ t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...repeat); }
   return t;
 }
 function rnd(seed){ let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
 
-const floorTex = canvasTex(1024, 1024, (g, w, h) => {
-  const r = rnd(7), rows = 8, ph = h / rows;
-  for (let i = 0; i < rows; i++){
-    let x = -r() * 400;
-    while (x < w){
-      const len = 300 + r() * 360, tone = 196 + r() * 26;
-      g.fillStyle = `rgb(${tone},${tone * 0.86 | 0},${tone * 0.7 | 0})`;
-      g.fillRect(x, i * ph, len, ph);
-      g.globalAlpha = 0.07;
-      for (let k = 0; k < 14; k++){
-        g.strokeStyle = r() > .5 ? '#7a5a3a' : '#fff4e2';
-        g.lineWidth = 1 + r() * 2;
-        g.beginPath(); const y = i * ph + r() * ph;
-        g.moveTo(x, y); g.bezierCurveTo(x + len * .3, y + (r() - .5) * 10, x + len * .7, y + (r() - .5) * 10, x + len, y);
-        g.stroke();
-      }
-      g.globalAlpha = 1;
-      g.fillStyle = 'rgba(90,64,40,.35)'; g.fillRect(x, i * ph, 2, ph);
-      x += len;
-    }
-    g.fillStyle = 'rgba(90,64,40,.3)'; g.fillRect(0, i * ph, w, 2);
-  }
-}, [3, 3]);
-
-const wallTex = canvasTex(512, 512, (g, w, h) => {
-  g.fillStyle = '#f4efe8'; g.fillRect(0, 0, w, h);
-  const r = rnd(3);
-  for (let i = 0; i < 9000; i++){
-    const v = r() > .5 ? 255 : 200;
-    g.fillStyle = `rgba(${v},${v - 8},${v - 20},${r() * .05})`;
-    g.fillRect(r() * w, r() * h, 2, 2);
-  }
-}, [4, 2]);
-
-function textTex(lines, {w = 1024, h = 256, bg = null} = {}){
-  return canvasTex(w, h, (g) => {
-    if (bg){ g.fillStyle = bg; g.fillRect(0, 0, w, h); }
-    g.textAlign = 'center'; g.textBaseline = 'middle';
-    lines.forEach(l => { g.font = l.font; g.fillStyle = l.color || '#2e2925'; g.fillText(l.text, w / 2, l.y * h); });
-  });
-}
-
-/* ---------- 材質 ---------- */
 const M = {
-  floor: new THREE.MeshStandardMaterial({map: floorTex, roughness: .55, metalness: 0, envMapIntensity: .5}),
-  wall: new THREE.MeshStandardMaterial({map: wallTex, roughness: .95, envMapIntensity: .3}),
-  wallLow: new THREE.MeshStandardMaterial({color: '#e9e1d6', roughness: .9, envMapIntensity: .3}),
-  white: new THREE.MeshStandardMaterial({color: '#fbf8f3', roughness: .35, envMapIntensity: .6}),
-  marble: new THREE.MeshStandardMaterial({color: '#f6f2ec', roughness: .18, metalness: 0, envMapIntensity: .9}),
+  white: new THREE.MeshStandardMaterial({color: '#fbf8f3', roughness: .4, envMapIntensity: .6}),
+  facade: new THREE.MeshStandardMaterial({color: '#efe5d6', roughness: .85, envMapIntensity: .35}),
+  plinth: new THREE.MeshStandardMaterial({color: '#e2d6c6', roughness: .7}),
   gold: new THREE.MeshStandardMaterial({color: '#d8bb84', roughness: .32, metalness: .55, envMapIntensity: 1.4}),
   goldSoft: new THREE.MeshStandardMaterial({color: '#d6c09c', roughness: .45, metalness: .45, envMapIntensity: 1.2}),
   wood: new THREE.MeshStandardMaterial({color: '#c9a882', roughness: .6}),
-  mat: new THREE.MeshStandardMaterial({color: '#fefcf8', roughness: .9}),
-  leaf: new THREE.MeshStandardMaterial({color: '#8a9a78', roughness: .8}),
-  pot: new THREE.MeshStandardMaterial({color: '#efe7dc', roughness: .7}),
-  glass: new THREE.MeshPhysicalMaterial({color: '#ffffff', roughness: .05, transmission: .92, thickness: .05, transparent: true, opacity: .35, envMapIntensity: 1}),
-  bulb: new THREE.MeshStandardMaterial({color: '#fff3dc', emissive: '#ffe2b0', emissiveIntensity: 1.6}),
+  glass: new THREE.MeshPhysicalMaterial({color: '#fffaf2', roughness: .04, metalness: 0, transparent: true, opacity: .16, envMapIntensity: 1.6, clearcoat: 1}),
+  leaf: new THREE.MeshStandardMaterial({color: '#7f9478', roughness: .85}),
+  leafDark: new THREE.MeshStandardMaterial({color: '#647a60', roughness: .85}),
+  pearl: new THREE.MeshPhysicalMaterial({color: '#fbf6ee', roughness: .22, clearcoat: 1, clearcoatRoughness: .15, sheen: 1, sheenColor: new THREE.Color('#ffe9d0'), envMapIntensity: 1.2}),
+  bulb: new THREE.MeshStandardMaterial({color: '#fff3dc', emissive: '#ffe2b0', emissiveIntensity: 1.8}),
 };
-
-/* ---------- 房間 ---------- */
-const W = 14, D = 12, H = 5;
-const room = new THREE.Group(); scene.add(room);
-function box(w, h, d, mat, x, y, z, {cast = false, receive = true} = {}){
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-  m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = receive; room.add(m); return m;
+const room = new THREE.Group(); scene.add(room);   // 聖誕樹函式會加到這裡
+function add(geo, mat, x, y, z, parent = room, {cast = true, receive = true} = {}){
+  const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = receive; parent.add(m); return m;
 }
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(W, D + 6), M.floor);
-floor.rotation.x = -Math.PI / 2; floor.position.z = 3; floor.receiveShadow = true; room.add(floor);
-// walls: back, left, right
-box(W, H, .2, M.wall, 0, H / 2, -D / 2 - .1);
-box(.2, H, D, M.wall, -W / 2 - .1, H / 2, 0);
-box(.2, H, D, M.wall, W / 2 + .1, H / 2, 0);
-// wainscot lower panels + gold rail + baseboard
-box(W, 1.0, .06, M.wallLow, 0, .5, -D / 2 + .03);
-box(.06, 1.0, D, M.wallLow, -W / 2 + .03, .5, 0);
-box(.06, 1.0, D, M.wallLow, W / 2 - .03, .5, 0);
-box(W, .04, .1, M.gold, 0, 1.0, -D / 2 + .05);
-box(.1, .04, D, M.gold, -W / 2 + .05, 1.0, 0);
-box(.1, .04, D, M.gold, W / 2 - .05, 1.0, 0);
-box(W, .14, .1, M.white, 0, .07, -D / 2 + .05);
-box(.1, .14, D, M.white, -W / 2 + .05, .07, 0);
-box(.1, .14, D, M.white, W / 2 - .05, .07, 0);
-// ceiling beam line (crown)
-box(W, .12, .14, M.white, 0, H - .06, -D / 2 + .07);
-box(.14, .12, D, M.white, -W / 2 + .07, H - .06, 0);
-box(.14, .12, D, M.white, W / 2 - .07, H - .06, 0);
-// round rug
-const rug = new THREE.Mesh(new THREE.CircleGeometry(3.4, 64), new THREE.MeshStandardMaterial({color: '#ebe2d6', roughness: 1}));
-rug.rotation.x = -Math.PI / 2; rug.position.set(0, .005, 2.2); rug.receiveShadow = true; room.add(rug);
-const rugRing = new THREE.Mesh(new THREE.RingGeometry(3.15, 3.22, 64), new THREE.MeshStandardMaterial({color: '#cdb38a', roughness: .8}));
-rugRing.rotation.x = -Math.PI / 2; rugRing.position.set(0, .007, 2.2); room.add(rugRing);
 
 /* ---------- 燈光 ---------- */
-scene.add(new THREE.HemisphereLight('#fff8ee', '#e3d6c4', 1.05));
-const sun = new THREE.DirectionalLight('#fff4e4', 1.1);
-sun.position.set(4, 9, 7); sun.castShadow = true;
+scene.add(new THREE.HemisphereLight('#fff8ee', '#cdbfa9', .8));
+const sun = new THREE.DirectionalLight('#fff1dc', 2.6);
+sun.position.set(9, 16, 12); sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
-Object.assign(sun.shadow.camera, {left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 25});
-sun.shadow.bias = -0.0004; sun.shadow.radius = 4;
+Object.assign(sun.shadow.camera, {left: -14, right: 14, top: 14, bottom: -14, near: 1, far: 50});
+sun.shadow.bias = -.0004; sun.shadow.normalBias = .03;
 scene.add(sun);
 
-// pendant lamps
-function pendant(x, z, len){
-  const g = new THREE.Group();
-  const cord = new THREE.Mesh(new THREE.CylinderGeometry(.008, .008, len, 6), M.gold);
-  cord.position.y = H - len / 2; g.add(cord);
-  const shade = new THREE.Mesh(new THREE.SphereGeometry(.26, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({color: '#f7f1e8', roughness: .4, side: THREE.DoubleSide, emissive: '#ffe9c6', emissiveIntensity: .15}));
-  shade.position.y = H - len; g.add(shade);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(.26, .012, 8, 48), M.gold);
-  ring.rotation.x = Math.PI / 2; ring.position.y = H - len; g.add(ring);
-  const bulb = new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), M.bulb);
-  bulb.position.y = H - len - .02; g.add(bulb);
-  const l = new THREE.PointLight('#ffdcae', 4, 6, 1.6);
-  l.position.y = H - len - .12; g.add(l);
-  g.position.set(x, 0, z); scene.add(g);
-}
-pendant(-2.6, 2.4, 1.35); pendant(0, 2.0, 1.25); pendant(2.6, 2.4, 1.35);
+/* ---------- 地面：圓形石板廣場＋霧綠草地 ---------- */
+const PY = .36;
+const stoneTex = canvasTex(1024, 1024, (g, w, h) => {
+  g.fillStyle = '#e4d8c7'; g.fillRect(0, 0, w, h);
+  const r = rnd(7), s = 64;
+  for (let y = 0; y < h; y += s) for (let x = 0; x < w; x += s){
+    const off = (y / s) % 2 ? s / 2 : 0;
+    const v = 226 + r() * 14; g.fillStyle = `rgb(${v},${v - 9},${v - 22})`;
+    g.fillRect(x + off + 1.5, y + 1.5, s - 3, s - 3);
+  }
+  g.strokeStyle = 'rgba(200,180,150,.35)'; g.lineWidth = 1.5;
+  for (let y = 0; y <= h; y += s){ g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+}, [3, 3]);
+const base = add(new THREE.CylinderGeometry(11, 11.3, PY, 96), new THREE.MeshStandardMaterial({color: '#dccdb8', roughness: .8}), 0, PY / 2, 0, room, {cast: false});
+const lawn = add(new THREE.CircleGeometry(11, 96), new THREE.MeshStandardMaterial({color: '#b9c6a8', roughness: 1}), 0, PY + .002, 0, room, {cast: false});
+lawn.rotation.x = -Math.PI / 2;
+const plaza = add(new THREE.CircleGeometry(8.2, 96), new THREE.MeshStandardMaterial({map: stoneTex, roughness: .7}), 0, PY + .006, .4, room, {cast: false});
+plaza.rotation.x = -Math.PI / 2;
+const ring = add(new THREE.TorusGeometry(8.2, .05, 8, 120), M.gold, 0, PY + .01, .4, room, {cast: false}); ring.rotation.x = Math.PI / 2;
+const rimTop = add(new THREE.TorusGeometry(11.05, .06, 8, 140), M.goldSoft, 0, PY, 0, room, {cast: false}); rimTop.rotation.x = Math.PI / 2;
+// 地毯步道：從門口往前
+const runner = add(new THREE.PlaneGeometry(1.5, 4.2), new THREE.MeshStandardMaterial({color: '#e7d3c8', roughness: 1}), 0, PY + .012, 3.6, room, {cast: false});
+runner.rotation.x = -Math.PI / 2;
+[-1, 1].forEach(d => { const e = add(new THREE.BoxGeometry(.04, .01, 4.2), M.gold, d * .75, PY + .016, 3.6, room, {cast: false}); });
 
-/* ---------- 作品相框 ---------- */
+/* ---------- 建築 ---------- */
+const BW = 10, BD = 5.4, BH = 4.8, FZ = 1.4;                 // 寬、深、高、正面 z
+const bz = FZ - BD / 2;
+const shop = new THREE.Group(); room.add(shop);
+// 開口：中間拱門、兩側拱形櫥窗
+const DOOR = {x: 0, w: 1.5, h: 2.35};                    // 門寬、直線段高度（上面再加半圓）
+const WIN = [{x: -3.15, w: 2.5, y0: .78, h: 1.55}, {x: 3.15, w: 2.5, y0: .78, h: 1.55}];
+function archPath(path, x, w, y0, h, hole){
+  const r = w / 2;
+  path.moveTo(x - r, y0); path.lineTo(x - r, y0 + h); path.absarc(x, y0 + h, r, Math.PI, 0, true); path.lineTo(x + r, y0); path.lineTo(x - r, y0);
+}
+const front = new THREE.Shape();
+front.moveTo(-BW / 2, 0); front.lineTo(BW / 2, 0); front.lineTo(BW / 2, BH); front.lineTo(-BW / 2, BH); front.lineTo(-BW / 2, 0);
+const doorHole = new THREE.Path(); archPath(doorHole, DOOR.x, DOOR.w, .02, DOOR.h); front.holes.push(doorHole);
+WIN.forEach(o => { const p = new THREE.Path(); archPath(p, o.x, o.w, o.y0, o.h); front.holes.push(p); });
+const frontMesh = add(new THREE.ExtrudeGeometry(front, {depth: .3, bevelEnabled: false, curveSegments: 40}), M.facade, 0, PY, FZ - .3, shop);
+// 側牆、背牆、屋頂
+add(new THREE.BoxGeometry(.3, BH, BD), M.facade, -BW / 2 + .15, PY + BH / 2, bz, shop);
+add(new THREE.BoxGeometry(.3, BH, BD), M.facade, BW / 2 - .15, PY + BH / 2, bz, shop);
+add(new THREE.BoxGeometry(BW, BH, .3), M.facade, 0, PY + BH / 2, FZ - BD + .15, shop);
+add(new THREE.BoxGeometry(BW + .5, .22, BD + .5), M.white, 0, PY + BH + .11, bz, shop);
+// 牆腳石材、上緣線板、金色腰線
+add(new THREE.BoxGeometry(BW + .14, .34, BD + .14), M.plinth, 0, PY + .17, bz, shop);
+add(new THREE.BoxGeometry(BW + .4, .14, .5), M.white, 0, PY + BH - .1, FZ + .02, shop);
+add(new THREE.BoxGeometry(BW + .44, .03, .52), M.gold, 0, PY + BH - .19, FZ + .02, shop);
+add(new THREE.BoxGeometry(BW + .02, .025, .04), M.gold, 0, PY + .36, FZ + .01, shop);
+// 女兒牆欄杆
+for (let i = 0; i <= 28; i++){
+  const x = -BW / 2 + .2 + i * (BW - .4) / 28;
+  add(new THREE.CylinderGeometry(.045, .06, .42, 10), M.white, x, PY + BH + .43, FZ - .05, shop);
+}
+add(new THREE.BoxGeometry(BW + .2, .08, .2), M.white, 0, PY + BH + .68, FZ - .05, shop);
+// 溝紋壁柱
+[-4.75, -1.42, 1.42, 4.75].forEach(x => {
+  add(new THREE.BoxGeometry(.42, BH - .3, .14), M.white, x, PY + (BH - .3) / 2, FZ + .07, shop);
+  for (let k = -1; k <= 1; k++) add(new THREE.CylinderGeometry(.03, .03, BH - .7, 8), M.white, x + k * .11, PY + (BH - .3) / 2, FZ + .15, shop, {cast: false});
+  add(new THREE.BoxGeometry(.52, .1, .2), M.gold, x, PY + BH - .36, FZ + .09, shop);
+});
+// 拱形金框
+function archFrame(x, w, y0, h, z, t = .05){
+  const r = w / 2, pts = [new THREE.Vector3(x - r, y0, z)];
+  for (let i = 0; i <= 40; i++){ const a = Math.PI - Math.PI * i / 40; pts.push(new THREE.Vector3(x + Math.cos(a) * r, y0 + h + Math.sin(a) * r, z)); }
+  pts.push(new THREE.Vector3(x + r, y0, z));
+  return new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0), 160, t, 8, false), M.gold);
+}
+function archGlass(x, w, y0, h, z){
+  const s = new THREE.Shape(); archPath(s, x, w, y0, h);
+  const m = new THREE.Mesh(new THREE.ShapeGeometry(s, 40), M.glass); m.position.z = z; return m;
+}
 const clickable = [];
-function framedWork(work, cat, {height = 1.1, depth = .05, frame = .06, mat = .1, light = true, maxW = 99} = {}){
-  const g = new THREE.Group();
-  const photo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({color: '#ddd', roughness: .55, envMapIntensity: .2}));
-  const matBoard = new THREE.Mesh(new THREE.BoxGeometry(1, 1, depth * .6), M.mat);
-  const outer = new THREE.Mesh(new RoundedBoxGeometry(1, 1, depth, 2, .012), M.gold);
-  outer.castShadow = true;
-  g.add(outer, matBoard, photo);
-  const layout = aspect => {
-    let ph = height, pw = height * aspect;
-    if (pw + (mat + frame) * 2 > maxW){ pw = maxW - (mat + frame) * 2; ph = pw / aspect; }
-    photo.scale.set(pw, ph, 1); photo.position.z = depth * .62;
-    matBoard.scale.set(pw + mat * 2, ph + mat * 2, 1); matBoard.position.z = depth * .26;
-    outer.scale.set(pw + (mat + frame) * 2, ph + (mat + frame) * 2, 1);
-    g.userData.w = pw + (mat + frame) * 2; g.userData.h = ph + (mat + frame) * 2;
-  };
-  layout(.8);
-  tex(work.file, t => {
-    photo.material.map = t;
-    photo.material.emissiveMap = t; photo.material.emissive = new THREE.Color('#ffffff'); photo.material.emissiveIntensity = .38;
-    photo.material.color.set('#ffffff'); photo.material.needsUpdate = true;
-    layout(t.image.width / t.image.height);
+// 門：雙開玻璃門
+{
+  const g = new THREE.Group(); g.position.y = PY; shop.add(g);
+  g.add(archFrame(DOOR.x, DOOR.w, .02, DOOR.h, FZ + .02, .06));
+  const gl = archGlass(DOOR.x, DOOR.w - .04, .02, DOOR.h, FZ - .16); g.add(gl);
+  const panel = add(new THREE.BoxGeometry(.05, DOOR.h + .7, .05), M.gold, 0, (DOOR.h + .7) / 2, FZ - .15, g);
+  [-1, 1].forEach(d => {
+    add(new THREE.BoxGeometry(DOOR.w / 2 - .1, .05, .04), M.gold, d * DOOR.w / 4, .9, FZ - .15, g);
+    add(new THREE.CylinderGeometry(.018, .018, .45, 10), M.gold, d * .12, 1.2, FZ - .1, g);  // 門把
   });
-  g.userData.work = work; g.userData.cat = cat;
-  g.traverse(o => { if (o.isMesh) { o.userData.frame = g; clickable.push(o); } });
-  if (light){
-    const s = new THREE.SpotLight('#fff1dc', 6, 4.5, .5, .6, 1.4);
-    s.position.set(0, 1.5, 1.1); s.target = photo; g.add(s);
+  // 門上聖誕花圈：霧綠＋珍珠＋金色蝴蝶結
+  const wreath = new THREE.Group(); wreath.position.set(0, DOOR.h + .2, FZ + .02); g.add(wreath);
+  const wr = rnd(31);
+  for (let i = 0; i < 46; i++){ const a = i / 46 * Math.PI * 2, l = add(new THREE.SphereGeometry(.07, 8, 6), i % 2 ? M.leaf : M.leafDark, Math.cos(a) * .3, Math.sin(a) * .3, 0, wreath); l.scale.set(1, .55, .6); l.rotation.z = a + wr(); }
+  for (let i = 0; i < 12; i++){ const a = i / 12 * Math.PI * 2 + .2; add(new THREE.SphereGeometry(.028, 12, 10), M.pearl, Math.cos(a) * .3, Math.sin(a) * .3, .06, wreath); }
+  [-1, 1].forEach(d => { const loop = add(new THREE.TorusGeometry(.07, .022, 8, 18), M.gold, d * .08, -.3, .08, wreath); loop.scale.set(1.2, .8, 1); loop.rotation.z = d * .4; const tail = add(new THREE.BoxGeometry(.04, .2, .01), M.gold, d * .05, -.43, .08, wreath); tail.rotation.z = d * .25; });
+  // 台階
+  add(new THREE.BoxGeometry(2.4, .12, .7), M.white, 0, .06, FZ + .35, g);
+  const doorHit = new THREE.Mesh(new THREE.BoxGeometry(DOOR.w, DOOR.h + .8, .3), new THREE.MeshBasicMaterial({visible: false}));
+  doorHit.position.set(0, (DOOR.h + .8) / 2, FZ); doorHit.userData.enter = true; g.add(doorHit); clickable.push(doorHit);
+}
+// 櫥窗：金框、玻璃、窗台花槽
+WIN.forEach((o, i) => {
+  const g = new THREE.Group(); g.position.y = PY; shop.add(g);
+  g.add(archFrame(o.x, o.w, o.y0, o.h, FZ + .02));
+  g.add(archGlass(o.x, o.w - .04, o.y0, o.h, FZ - .12));
+  add(new THREE.BoxGeometry(.035, o.h + o.w / 2, .035), M.gold, o.x, o.y0 + (o.h + o.w / 2) / 2, FZ - .1, g, {cast: false});
+  add(new THREE.BoxGeometry(o.w, .035, .035), M.gold, o.x, o.y0 + o.h, FZ - .1, g, {cast: false});
+  add(new THREE.BoxGeometry(o.w + .3, .1, .4), M.white, o.x, o.y0 - .05, FZ + .12, g);           // 窗台
+  const box = add(new RoundedBoxGeometry(o.w + .1, .3, .36, 2, .03), M.white, o.x, o.y0 - .3, FZ + .2, g);
+  add(new THREE.BoxGeometry(o.w + .12, .025, .38), M.gold, o.x, o.y0 - .22, FZ + .2, g);
+  const fr = rnd(50 + i);
+  for (let k = 0; k < 22; k++){
+    const b = add(new THREE.SphereGeometry(.07 + fr() * .04, 10, 8), [M.leaf, M.leafDark][k % 2], o.x - o.w / 2 + .1 + fr() * (o.w - .2), o.y0 - .1 + fr() * .1, FZ + .14 + fr() * .14, g);
+    if (k % 3 === 0) add(new THREE.SphereGeometry(.05, 10, 8), new THREE.MeshStandardMaterial({color: ['#f3ddd4', '#fbf4ea', '#ecd2bf'][k % 3 === 0 ? (k / 3) % 3 : 0], roughness: .8}), b.position.x, b.position.y + .08, b.position.z + .03, g);
   }
-  return g;
+  const hit = new THREE.Mesh(new THREE.PlaneGeometry(o.w, o.h + o.w / 2), new THREE.MeshBasicMaterial({visible: false}));
+  hit.position.set(o.x, o.y0 + (o.h + o.w / 2) / 2, FZ + .03); hit.userData.enter = true; g.add(hit); clickable.push(hit);
+});
+// 櫥窗上方的條紋遮陽棚（香檳金＋象牙白，荷葉邊）
+function awning(x, w, y, depth = .9){
+  const g = new THREE.Group(); g.position.set(x, PY + y, FZ + .05); shop.add(g);
+  const n = 10, sw = w / n, slope = .5;
+  for (let i = 0; i < n; i++){
+    const m = i % 2 ? M.white : new THREE.MeshStandardMaterial({color: '#e2cba3', roughness: .7});
+    const s = add(new THREE.BoxGeometry(sw, .02, depth), m, -w / 2 + sw / 2 + i * sw, -Math.sin(slope) * depth / 2, Math.cos(slope) * depth / 2, g);
+    s.rotation.x = slope;
+    const sc = add(new THREE.CylinderGeometry(sw / 2, sw / 2, .02, 20, 1, false, 0, Math.PI), m, s.position.x, -Math.sin(slope) * depth, Math.cos(slope) * depth, g);
+    sc.rotation.x = Math.PI / 2; sc.rotation.z = Math.PI; sc.rotation.y = 0;
+  }
+  add(new THREE.CylinderGeometry(.025, .025, w + .1, 10), M.gold, 0, 0, 0, g).rotation.z = Math.PI / 2;
+  add(new THREE.CylinderGeometry(.018, .018, w, 10), M.gold, 0, -Math.sin(slope) * depth, Math.cos(slope) * depth, g).rotation.z = Math.PI / 2;
 }
-
-function plaque(work){
-  const t = textTex([
-    {text: 'NO.' + work.no, font: '500 40px "Bodoni Moda", serif', color: '#7a6652', y: .3},
-    {text: work.title, font: '700 54px "Noto Serif TC", serif', color: '#2e2925', y: .66},
-  ], {w: 768, h: 192, bg: '#fefcf8'});
-  const m = new THREE.Mesh(new THREE.BoxGeometry(.62, .155, .015), [M.goldSoft, M.goldSoft, M.goldSoft, M.goldSoft, new THREE.MeshStandardMaterial({map: t, roughness: .7}), M.goldSoft]);
-  return m;
-}
-
-function wallTitle(zh, en){
-  const t = textTex([
-    {text: zh, font: '700 92px "Noto Serif TC", serif', color: '#2e2925', y: .38},
-    {text: en, font: 'italic 400 58px "Bodoni Moda", serif', color: '#7a6652', y: .78},
-  ], {w: 1024, h: 256});
-  return new THREE.Mesh(new THREE.PlaneGeometry(2.4, .6), new THREE.MeshStandardMaterial({map: t, transparent: true, roughness: .9}));
-}
-
-/* ---------- 櫃台 + 招牌 ---------- */
-function buildCounter(){
-  // logo sign with arch
-  const arch = new THREE.Group();
-  const archShape = new THREE.Shape();
-  const aw = 1.6, ah = 2.2;
-  archShape.moveTo(-aw, 0); archShape.lineTo(-aw, ah); archShape.absarc(0, ah, aw, Math.PI, 0, true); archShape.lineTo(aw, 0); archShape.lineTo(-aw, 0);
-  const archPanel = new THREE.Mesh(new THREE.ShapeGeometry(archShape, 48), new THREE.MeshStandardMaterial({color: '#fbf8f3', roughness: .9}));
-  arch.add(archPanel);
-  const pts = []; for (let i = 0; i <= 64; i++){ const a = Math.PI - Math.PI * i / 64; pts.push(new THREE.Vector3(Math.cos(a) * aw, ah + Math.sin(a) * aw, 0)); }
-  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-aw, 0, 0), ...pts, new THREE.Vector3(aw, 0, 0)]);
-  const trim = new THREE.Mesh(new THREE.TubeGeometry(curve, 160, .025, 8, false), M.gold);
-  arch.add(trim);
-  arch.position.set(0, 1.04, -D / 2 + .02);
-  room.add(arch);
+WIN.forEach(o => awning(o.x, o.w + .5, o.y0 + o.h + o.w / 2 + .32));
+// 招牌：門上方的象牙白橢圓牌＋完整 logo
+{
+  const g = new THREE.Group(); g.position.set(0, PY + 3.95, FZ + .12); shop.add(g);
+  const plate = new THREE.Mesh(new THREE.CylinderGeometry(.78, .78, .06, 64), M.white); plate.rotation.x = Math.PI / 2; plate.scale.set(1.45, 1, 1); g.add(plate);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(.78, .03, 10, 80), M.gold); rim.scale.set(1.45, 1, 1); rim.position.z = .035; g.add(rim);
   tex('logo/main.png', t => {
-    const a = t.image.width / t.image.height, h = 2.25;
+    const a = t.image.width / t.image.height, h = 1.32;
     const sign = new THREE.Mesh(new THREE.PlaneGeometry(h * a, h), new THREE.MeshBasicMaterial({map: t, transparent: true, toneMapped: false}));
-    sign.position.set(0, 3.2, -D / 2 + .05); room.add(sign);
+    sign.position.z = .04; g.add(sign);
   });
-  const spot = new THREE.SpotLight('#fff0d8', 10, 6, .6, .7, 1.3);
-  spot.position.set(0, 4.8, -3.6); spot.target.position.set(0, 3.2, -D / 2); room.add(spot, spot.target);
+}
+// 門兩側壁燈
+[-1.05, 1.05].forEach(x => {
+  const g = new THREE.Group(); g.position.set(x, PY + 2.25, FZ + .02); shop.add(g);
+  add(new THREE.BoxGeometry(.12, .2, .04), M.gold, 0, 0, 0, g);
+  add(new THREE.CylinderGeometry(.012, .012, .2, 8), M.gold, 0, .02, .1, g).rotation.x = Math.PI / 2;
+  add(new THREE.CylinderGeometry(.09, .07, .26, 16, 1, true), new THREE.MeshStandardMaterial({color: '#fff6e6', emissive: '#ffe3b4', emissiveIntensity: .9, transparent: true, opacity: .85, side: THREE.DoubleSide}), 0, .1, .2, g);
+  add(new THREE.SphereGeometry(.035, 12, 10), M.bulb, 0, .08, .2, g, {cast: false});
+  const l = new THREE.PointLight('#ffd9a8', 1.2, 3, 1.6); l.position.set(0, .1, .3); g.add(l);
+});
 
-  // counter
-  const c = new THREE.Group();
-  const body = new THREE.Mesh(new RoundedBoxGeometry(3.4, 1.0, .8, 3, .06), M.white);
-  body.position.y = .5; body.castShadow = body.receiveShadow = true; c.add(body);
-  for (let i = -6; i <= 6; i++){
-    const flute = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .82, 12), M.white);
-    flute.position.set(i * .24, .5, .41); c.add(flute);
-  }
-  const top = new THREE.Mesh(new RoundedBoxGeometry(3.6, .07, .95, 2, .03), M.marble);
-  top.position.y = 1.03; top.castShadow = top.receiveShadow = true; c.add(top);
-  const band = new THREE.Mesh(new THREE.BoxGeometry(3.42, .03, .02), M.gold);
-  band.position.set(0, .96, .41); c.add(band);
-  // little props on counter: vase + flowers, jewelry tray, card stand
-  const vase = new THREE.Mesh(new THREE.CylinderGeometry(.09, .12, .32, 24), M.pot);
-  vase.position.set(-1.25, 1.22, 0); vase.castShadow = true; c.add(vase);
-  for (let i = 0; i < 7; i++){
-    const stem = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, .38, 4), M.leaf);
-    const a = i / 7 * Math.PI * 2, tilt = .25;
-    stem.position.set(-1.25 + Math.cos(a) * .05, 1.52, Math.sin(a) * .05); stem.rotation.set(Math.sin(a) * tilt, 0, -Math.cos(a) * tilt); c.add(stem);
-    const bloom = new THREE.Mesh(new THREE.SphereGeometry(.055, 12, 10), new THREE.MeshStandardMaterial({color: ['#f2d7d0', '#fbf3ea', '#e8c9b5'][i % 3], roughness: .8}));
-    bloom.position.set(-1.25 + Math.cos(a) * .14, 1.7, Math.sin(a) * .14); bloom.castShadow = true; c.add(bloom);
-  }
-  const tray = new THREE.Mesh(new THREE.CylinderGeometry(.32, .32, .03, 48), M.gold);
-  tray.position.set(1.0, 1.08, .05); c.add(tray);
-  const pearlMat = new THREE.MeshPhysicalMaterial({color: '#fbf6ee', roughness: .22, clearcoat: 1, clearcoatRoughness: .15, sheen: 1, sheenColor: new THREE.Color('#ffe9d0'), envMapIntensity: 1.2});
-  for (let i = 0; i < 18; i++){
-    const a = i / 18 * Math.PI * 2, r = .2;
-    const p = new THREE.Mesh(new THREE.SphereGeometry(.028, 16, 12), pearlMat);
-    p.position.set(1.0 + Math.cos(a) * r, 1.12, .05 + Math.sin(a) * r); p.castShadow = true; c.add(p);
-  }
-  const big = new THREE.Mesh(new THREE.SphereGeometry(.06, 24, 16), pearlMat);
-  big.position.set(1.0, 1.15, .05); c.add(big);
-  c.position.set(0, 0, -D / 2 + 1.2);
-  room.add(c);
+/* ---------- 店內（透過玻璃看得到）：暖光、展示架、作品 ---------- */
+const inside = new THREE.Group(); inside.position.y = PY; shop.add(inside);
+const inWall = new THREE.MeshStandardMaterial({color: '#e9d6bf', roughness: .9, emissive: '#f2cf9f', emissiveIntensity: .16});
+add(new THREE.BoxGeometry(BW - .6, BH - .2, .1), inWall, 0, (BH - .2) / 2, FZ - 2.4, inside, {cast: false});
+add(new THREE.PlaneGeometry(BW - .6, 2.4), new THREE.MeshStandardMaterial({color: '#ead9c3', roughness: .7}), 0, .01, FZ - 1.2, inside, {cast: false}).rotation.x = -Math.PI / 2;
+const warm = new THREE.PointLight('#ffdcae', 3.2, 9, 1.4); warm.position.set(0, 3.2, FZ - 1); inside.add(warm);
+// 店內小吊燈
+[-3.15, 0, 3.15].forEach(x => {
+  add(new THREE.CylinderGeometry(.006, .006, 1.1, 6), M.gold, x, BH - .75, FZ - 1.1, inside, {cast: false});
+  add(new THREE.SphereGeometry(.2, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({color: '#f7f1e8', side: THREE.DoubleSide, emissive: '#ffe9c6', emissiveIntensity: .3}), x, BH - 1.3, FZ - 1.1, inside, {cast: false});
+  add(new THREE.SphereGeometry(.06, 12, 10), M.bulb, x, BH - 1.38, FZ - 1.1, inside, {cast: false});
+});
+// 櫥窗展示台＋作品畫架（作品之後讀進來）
+const easels = [];
+WIN.forEach((o, i) => {
+  add(new THREE.CylinderGeometry(.75, .8, .55, 40), M.white, o.x, .28, FZ - 1.0, inside);
+  add(new THREE.TorusGeometry(.75, .015, 8, 60), M.gold, o.x, .555, FZ - 1.0, inside).rotation.x = Math.PI / 2;
+  [-.52, .52].forEach((dx, k) => { const e = new THREE.Group(); e.position.set(o.x + dx, .56, FZ - .95 + (k ? .1 : 0)); e.rotation.y = -dx * .45; inside.add(e); easels.push(e); });
+  // 一串珍珠擺飾
+  for (let k = 0; k < 14; k++){ const a = k / 14 * Math.PI * 2; add(new THREE.SphereGeometry(.026, 12, 10), M.pearl, o.x + Math.cos(a) * .16, .59, FZ - .62 + Math.sin(a) * .1, inside, {cast: false}); }
+});
+// 門後的展示櫃剪影
+add(new RoundedBoxGeometry(2.4, .95, .6, 2, .05), M.white, 0, .48, FZ - 2.0, inside);
+add(new THREE.BoxGeometry(2.5, .05, .7), new THREE.MeshStandardMaterial({color: '#f6f2ec', roughness: .2}), 0, .98, FZ - 2.0, inside);
+function easelWork(e, work){
+  const w = .7, a = add(new THREE.CylinderGeometry(.012, .012, 1.0, 6), M.gold, 0, .5, -.08, e);
+  a.rotation.x = .18;
+  [-1, 1].forEach(d => { const l = add(new THREE.CylinderGeometry(.012, .012, 1.0, 6), M.gold, d * .2, .48, .05, e); l.rotation.z = d * .12; });
+  const frame = add(new THREE.BoxGeometry(w + .08, w * 1.25 + .08, .04), M.gold, 0, .72, .06, e);
+  const mat = add(new THREE.PlaneGeometry(w, w * 1.25), new THREE.MeshStandardMaterial({color: '#fefcf8', roughness: .9}), 0, .72, .085, e, {cast: false});
+  tex(work.file, t => {
+    const ar = t.image.width / t.image.height; let pw = w - .1, ph = pw / ar; if (ph > w * 1.25 - .1){ ph = w * 1.25 - .1; pw = ph * ar; }
+    add(new THREE.PlaneGeometry(pw, ph), new THREE.MeshStandardMaterial({map: t, roughness: .6, emissive: '#ffffff', emissiveMap: t, emissiveIntensity: .12}), 0, .72, .09, e, {cast: false});
+  });
+  e.rotation.x = -.06;
 }
 
-/* ---------- 展示台（中間三座，放最新作品） ---------- */
-const spinners = [];
-function pedestal(x, z, work, cat, h = .62){
-  const g = new THREE.Group(), R = .62, DH = 1.62;
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(R + .1, R + .15, .08, 56), M.gold);
-  base.position.y = .04; base.castShadow = true; g.add(base);
-  const col = new THREE.Mesh(new THREE.CylinderGeometry(R - .04, R - .02, h, 56), M.marble);
-  col.position.y = h / 2 + .08; col.castShadow = col.receiveShadow = true; g.add(col);
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(R + .1, R + .1, .05, 56), M.gold);
-  cap.position.y = h + .1; cap.castShadow = true; g.add(cap);
-  const dome = new THREE.Mesh(new THREE.CylinderGeometry(R + .04, R + .04, DH, 56, 1, true), M.glass);
-  dome.position.y = h + .12 + DH / 2; g.add(dome);
-  const domeTop = new THREE.Mesh(new THREE.CylinderGeometry(R + .07, R + .07, .03, 56), M.gold);
-  domeTop.position.y = h + .13 + DH; g.add(domeTop);
-  if (work){
-    const opt = {height: 1.1, maxW: 1.12, frame: .04, mat: .06, depth: .04, light: false};
-    const f = framedWork(work, cat, opt);
-    const holder = new THREE.Group(); holder.position.y = h + .12 + DH / 2 - .02; holder.add(f);
-    const back = framedWork(work, cat, opt);
-    back.rotation.y = Math.PI; holder.add(back);
-    g.add(holder); spinners.push(holder);
-    const lbl = plaque(work);
-    lbl.position.set(0, h * .55 + .08, R - .02); g.add(lbl);
+/* ---------- 店外擺設 ---------- */
+function topiary(x, z, s = 1){
+  const g = new THREE.Group(); g.position.set(x, PY, z); g.scale.setScalar(s); room.add(g);
+  add(new THREE.CylinderGeometry(.34, .26, .62, 32), M.white, 0, .31, 0, g);
+  add(new THREE.TorusGeometry(.34, .02, 8, 40), M.gold, 0, .62, 0, g).rotation.x = Math.PI / 2;
+  add(new THREE.CylinderGeometry(.035, .04, .6, 8), M.wood, 0, .9, 0, g);
+  const r = rnd(Math.round(x * 13 + z * 7 + 99));
+  const ball = new THREE.Group(); ball.position.y = 1.45; g.add(ball);
+  for (let i = 0; i < 60; i++){
+    const u = r() * 2 - 1, a = r() * Math.PI * 2, rr = Math.sqrt(1 - u * u);
+    const l = add(new THREE.SphereGeometry(.12, 8, 6), i % 3 ? M.leaf : M.leafDark, Math.cos(a) * rr * .42, u * .42, Math.sin(a) * rr * .42, ball);
   }
-  g.position.set(x, 0, z); room.add(g);
-  return g;
+  add(new THREE.SphereGeometry(.4, 20, 14), M.leafDark, 0, 0, 0, ball);
+  // 小燈串
+  for (let i = 0; i < 14; i++){ const a = i / 14 * Math.PI * 2; add(new THREE.SphereGeometry(.022, 8, 6), M.bulb, Math.cos(a) * .47, Math.sin(a * 2) * .15, Math.sin(a) * .47, ball, {cast: false}); }
 }
-
-/* ---------- 綠植 ---------- */
-function plant(x, z, s = 1){
-  const g = new THREE.Group();
-  const pot = new THREE.Mesh(new THREE.CylinderGeometry(.28, .22, .5, 32), M.pot);
-  pot.position.y = .25; pot.castShadow = true; g.add(pot);
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(.28, .012, 8, 40), M.gold); rim.rotation.x = Math.PI / 2; rim.position.y = .5; g.add(rim);
-  const r = rnd(x * 100 + z * 10 + 11);
-  for (let i = 0; i < 16; i++){
-    const leaf = new THREE.Mesh(new THREE.SphereGeometry(.16, 12, 8), M.leaf);
-    leaf.scale.set(.5, 1.6, .18);
-    const a = r() * Math.PI * 2, t = .3 + r() * .5;
-    leaf.position.set(Math.cos(a) * .12 * t, .7 + r() * .8, Math.sin(a) * .12 * t);
-    leaf.rotation.set(Math.sin(a) * t, a, -Math.cos(a) * t); leaf.castShadow = true; g.add(leaf);
-  }
-  g.scale.setScalar(s); g.position.set(x, 0, z); room.add(g);
+topiary(-1.45, FZ + .75, 1); topiary(1.45, FZ + .75, 1);
+topiary(-5.6, FZ + .5, .85); topiary(5.0, FZ + .6, .8);
+// 路燈
+function lamp(x, z){
+  const g = new THREE.Group(); g.position.set(x, PY, z); room.add(g);
+  add(new THREE.CylinderGeometry(.16, .2, .3, 20), M.gold, 0, .15, 0, g);
+  add(new THREE.CylinderGeometry(.045, .06, 3.1, 14), new THREE.MeshStandardMaterial({color: '#6e5a48', roughness: .5, metalness: .4}), 0, 1.7, 0, g);
+  add(new THREE.CylinderGeometry(.12, .08, .1, 16), M.gold, 0, 3.27, 0, g);
+  add(new THREE.SphereGeometry(.26, 24, 16), new THREE.MeshStandardMaterial({color: '#fff7e8', emissive: '#ffe4b8', emissiveIntensity: 1.1, roughness: .3}), 0, 3.55, 0, g, {cast: false});
+  add(new THREE.ConeGeometry(.06, .14, 12), M.gold, 0, 3.86, 0, g);
+  const l = new THREE.PointLight('#ffdcae', 2, 6, 1.5); l.position.y = 3.5; g.add(l);
 }
+lamp(-6.7, 2.4);
+// 長椅
+{
+  const g = new THREE.Group(); g.position.set(-5.4, PY, 3.6); g.rotation.y = .5; room.add(g);
+  const slat = new THREE.MeshStandardMaterial({color: '#d9c2a2', roughness: .6});
+  for (let i = 0; i < 4; i++) add(new THREE.BoxGeometry(1.6, .04, .1), slat, 0, .45, -.18 + i * .12, g);
+  for (let i = 0; i < 3; i++) add(new THREE.BoxGeometry(1.6, .1, .03), slat, 0, .62 + i * .13, -.27, g).rotation.x = -.15;
+  const iron = new THREE.MeshStandardMaterial({color: '#6e5a48', roughness: .5, metalness: .4});
+  [-.7, .7].forEach(x => { add(new THREE.BoxGeometry(.05, .45, .45), iron, x, .22, -.05, g); add(new THREE.BoxGeometry(.05, .45, .05), iron, x, .7, -.28, g); });
+  // 椅上的小禮物袋
+  const bag = add(new RoundedBoxGeometry(.32, .36, .16, 2, .02), new THREE.MeshStandardMaterial({color: '#ecd3ca', roughness: .7}), .35, .66, -.08, g);
+  const h = add(new THREE.TorusGeometry(.08, .012, 6, 20, Math.PI), M.gold, .35, .84, -.08, g);
+}
+// 立牌：新品上架
+const board = new THREE.Group(); board.position.set(2.6, PY, 3.9); board.rotation.y = -.35; room.add(board);
+{
+  const leg = new THREE.MeshStandardMaterial({color: '#c9a882', roughness: .6});
+  [[1, .18], [-1, -.18]].forEach(([d, rx]) => { const p = add(new THREE.BoxGeometry(.9, 1.3, .05), M.white, 0, .66, d * .16, board); p.rotation.x = rx; });
+  const bf = add(new THREE.BoxGeometry(.94, 1.34, .02), M.gold, 0, .66, .18, board); bf.rotation.x = .18;
+  const drawBoard = (g, w, h) => {
+    g.fillStyle = '#fefcf8'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#c9ab7a'; g.lineWidth = 4; g.strokeRect(22, 22, w - 44, h - 44);
+    g.fillStyle = '#a8895c'; g.font = 'italic 46px "Bodoni Moda", serif'; g.textAlign = 'center'; g.fillText('New Arrivals', w / 2, 100);
+    g.fillStyle = '#4e3f33'; g.font = '700 54px "Noto Serif TC", serif'; g.fillText('新作上架', w / 2, 176);
+    g.fillStyle = '#c9ab7a'; g.fillRect(w / 2 - 60, 204, 120, 2);
+    g.fillStyle = '#7a6652'; g.font = '30px "Noto Sans TC", sans-serif'; g.fillText('手作美甲片 · 飾品', w / 2, 640);
+  };
+  const t = canvasTex(512, 720, drawBoard);
+  document.fonts.ready.then(() => { const c = t.image; drawBoard(c.getContext('2d'), c.width, c.height); t.needsUpdate = true; });
+  const face = add(new THREE.PlaneGeometry(.84, 1.2), new THREE.MeshStandardMaterial({map: t, roughness: .8}), 0, .66, .195, board, {cast: false});
+  face.rotation.x = .18; board.userData.face = face;
+}
+// 花盆小樹叢
+function shrub(x, z, s = 1){
+  const g = new THREE.Group(); g.position.set(x, PY, z); g.scale.setScalar(s); room.add(g);
+  const r = rnd(Math.round(x * 31 + z * 17 + 7));
+  for (let i = 0; i < 9; i++) add(new THREE.SphereGeometry(.28 + r() * .12, 12, 10), i % 2 ? M.leaf : M.leafDark, (r() - .5) * .7, .25 + r() * .25, (r() - .5) * .5, g);
+  for (let i = 0; i < 6; i++) add(new THREE.SphereGeometry(.06, 10, 8), new THREE.MeshStandardMaterial({color: ['#f3ddd4', '#fbf4ea', '#ecd2bf'][i % 3], roughness: .8}), (r() - .5) * .7, .5 + r() * .2, .2 + r() * .1, g, {cast: false});
+}
+shrub(-4.6, -3.0, 1.3); shrub(4.6, -3.2, 1.2); shrub(-6.6, 1.0, 1.1); shrub(7.6, -1.2, 1.1);
 
+/* ---------- 閃光粒子 ---------- */
+const sparkTex = canvasTex(64, 64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,248,230,1)'); gr.addColorStop(.25, 'rgba(255,230,190,.6)'); gr.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); });
+const SP = 160, sp = new Float32Array(SP * 3), sr = rnd(42);
+for (let i = 0; i < SP; i++){ const a = sr() * Math.PI * 2, d = sr() * 10; sp[i * 3] = Math.cos(a) * d; sp[i * 3 + 1] = PY + .5 + sr() * 7; sp[i * 3 + 2] = Math.sin(a) * d; }
+const sparkGeo = new THREE.BufferGeometry(); sparkGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+const sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({size: .12, map: sparkTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .75}));
+scene.add(sparks);
 
 /* ---------- 聖誕樹（霧綠枝葉＋香檳金、珍珠、暖光） ---------- */
 const treeLights = [];
@@ -695,200 +655,90 @@ function xmasTree(x, z, s = 1){
   return g;
 }
 
-/* ---------- 擺放作品 ---------- */
-function layoutWorks({nails, acc}){
-  const latestFirst = list => list.slice().reverse();
-  const N = latestFirst(nails), A = latestFirst(acc);
 
-  // 左牆：美甲片
-  const lt = wallTitle('美甲片', 'Press-on Nails');
-  lt.position.set(-W / 2 + .03, 4.25, 0); lt.rotation.y = Math.PI / 2; room.add(lt);
-  placeOnWall(N, 'nails', -1);
-  // 右牆：飾品
-  const rt = wallTitle('飾品創作', 'Accessories');
-  rt.position.set(W / 2 - .03, 4.25, 0); rt.rotation.y = -Math.PI / 2; room.add(rt);
-  placeOnWall(A, 'accessories', 1);
 
-  // 中央展示台：最新美甲、最新項鍊、最新耳環
-  const latest = t => A.find(w => w.type === t);
-  pedestal(-2.6, 2.4, N[0], 'nails');
-  pedestal(0, 2.0, latest('necklace') || A[0], 'accessories', .5);
-  pedestal(2.6, 2.4, latest('earring') || A[1], 'accessories');
-}
-
-const wallCols = {nails: [], accessories: []};
-function placeOnWall(list, cat, side){
-  // side: -1 left wall (x=-W/2), +1 right wall
-  const n = list.length, span = D - 2.4;
-  const rows = n > 5 ? 2 : 1, perRow = Math.ceil(n / rows);
-  const h = rows === 2 ? .95 : 1.08;
-  const ys = rows === 2 ? [3.05, 1.72] : [2.35];
-  list.forEach((w, i) => {
-    const r = Math.floor(i / perRow), k = i % perRow, cnt = Math.min(perRow, n - r * perRow);
-    const step = span / Math.max(perRow, 1);
-    const z = (k - (cnt - 1) / 2) * step * -side;
-    const f = framedWork(w, cat, {height: h});
-    f.position.set(side * (W / 2 - .06), ys[r], z);
-    if (!wallCols[cat].some(v => Math.abs(v - z) < .05)) wallCols[cat].push(z);
-    f.userData.col = z;
-    f.rotation.y = -side * Math.PI / 2;
-    room.add(f);
-    const p = plaque(w); p.scale.setScalar(rows === 2 ? .8 : .95);
-    p.position.set(side * (W / 2 - .03), ys[r] - h / 2 - .26, z);
-    p.rotation.y = -side * Math.PI / 2;
-    room.add(p);
-  });
-}
+const tree = xmasTree(6.2, 3.0, 1.35); tree.position.y = PY;
 
 /* ---------- 視角 ---------- */
 const views = {
-  overview: {pos: [0, 3.1, 11], target: [0, 1.9, -.8]},
-  nails:    {pos: [-1.2, 2.3, 0], target: [-W / 2, 2.25, 0]},
-  acc:      {pos: [1.2, 2.4, 0], target: [W / 2, 2.35, 0]},
-  counter:  {pos: [0, 2.2, -.6], target: [0, 2.2, -D / 2]},
+  front:  {pos: [9.5, 6.4, 15.5], target: [.4, 2.0, 0]},
+  window: {pos: [-3.1, 2.3, 7.9], target: [-3.1, 1.6, FZ - 1]},
+  tree:   {pos: [.8, 3.9, 12.4], target: [5.6, 2.7, 3.0]},
+  door:   {pos: [0, 1.9, FZ + 1.1], target: [0, 1.7, FZ - 3]},
 };
 let tween = null;
-function flyTo(pos, target, dur = 1.3){
-  tween = {p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), s: performance.now(), d: reduce ? 1 : dur * 1000};
+function flyTo(pos, target, dur = 1.4){
+  tween = {p0: camera.position.clone(), p1: new THREE.Vector3(...pos), t0: controls.target.clone(), t1: new THREE.Vector3(...target), s: performance.now(), d: dur * 1000};
 }
-let wall = null, colIdx = -1;
-const isMobile = () => innerWidth < 640;
-function colsFor(name){
-  const cat = name === 'nails' ? 'nails' : 'accessories';
-  // order columns left→right as seen on screen
-  return wallCols[cat].slice().sort((a, b) => name === 'nails' ? b - a : a - b);
+// 手機直式畫面比較窄，視角自動拉遠
+function fit(v){
+  const k = innerWidth / innerHeight < .8 ? (v === views.door ? 1 : 1.38) : 1;
+  return [v.target.map((t, i) => t + (v.pos[i] - t) * k), v.target];
 }
-function wallFocus(i){
-  const cols = colsFor(wall); if (!cols.length) return;
-  colIdx = Math.max(0, Math.min(cols.length - 1, i));
-  const side = wall === 'nails' ? -1 : 1, z = cols[colIdx], d = isMobile() ? 2.9 : 3.6;
-  flyTo([side * (W / 2 - d), 2.4, z], [side * W / 2, 2.38, z], .9);
-  updatePager();
-}
-function updatePager(){
-  const n = wall ? colsFor(wall).length : 0;
-  $('prev').disabled = colIdx === 0;
-  $('next').disabled = colIdx === n - 1;
-  $('counter').textContent = colIdx < 0 ? '' : (colIdx + 1) + ' / ' + n;
-  $('counter').style.visibility = colIdx < 0 ? 'hidden' : 'visible';
-}
-function setWall(name){ wall = name; document.body.classList.toggle('wall-mode', !!name); }
 function setView(name){
-  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
-  if (name === 'nails' || name === 'acc'){
-    setWall(name);
-    if (isMobile()) { wallFocus(0); return; }
-    colIdx = -1; updatePager();
-  } else setWall(null);
-  const v = views[name]; flyTo(v.pos, v.target);
+  document.querySelectorAll('.nav button[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
+  const [p, t] = fit(views[name]); flyTo(p, t);
 }
-$('prev').addEventListener('click', () => { closePanel(); wallFocus(colIdx < 0 ? colsFor(wall).length - 1 : colIdx - 1); });
-$('next').addEventListener('click', () => { closePanel(); wallFocus(colIdx < 0 ? 0 : colIdx + 1); });
-addEventListener('keydown', e => { if (!wall) return; if (e.key === 'ArrowLeft') $('prev').click(); if (e.key === 'ArrowRight') $('next').click(); });
-document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => { closePanel(); setView(b.dataset.view); }));
+document.querySelectorAll('.nav button[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+let entering = false;
+function enterShop(){
+  if (entering) return; entering = true;
+  $('doortag').classList.add('off');
+  const v = views.door; flyTo(v.pos, v.target, 1.5);
+  setTimeout(() => $('fade').classList.add('on'), 1000);
+  setTimeout(() => { location.href = 'showroom.html'; }, 1650);
+}
+$('enterBtn').addEventListener('click', enterShop);
+$('doortag').addEventListener('click', e => { e.preventDefault(); enterShop(); });
+// 回到這頁（瀏覽器返回）時取消淡出
+addEventListener('pageshow', () => { entering = false; $('fade').classList.remove('on'); });
 
-/* ---------- 點選作品 ---------- */
+/* ---------- 點擊：店門、櫥窗 ---------- */
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
-let hovered = null, downAt = null;
-function pick(e){
+let downAt = null;
+function hit(e){
   const r = canvas.getBoundingClientRect();
   ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
   ray.setFromCamera(ptr, camera);
-  const hit = ray.intersectObjects(clickable, false)[0];
-  return hit ? hit.object.userData.frame : null;
+  return ray.intersectObjects(clickable, false)[0];
 }
-canvas.addEventListener('pointermove', e => {
-  if (e.pointerType !== 'mouse') return;
-  const f = pick(e);
-  if (f !== hovered){
-    if (hovered) hovered.userData.hoverT = 0;
-    hovered = f; canvas.classList.toggle('hover', !!f);
-  }
-});
 canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; hideHint(); });
 canvas.addEventListener('pointerup', e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
-  const f = pick(e); if (f) openWork(f);
+  if (hit(e)) enterShop();
 });
-
-const tmpV = new THREE.Vector3(), tmpN = new THREE.Vector3(), tmpQ = new THREE.Quaternion();
-function openWork(frame){
-  const w = frame.userData.work;
-  $('p-img').src = w.file; $('p-img').alt = w.title;
-  $('p-no').textContent = 'NO.' + w.no;
-  $('p-title').textContent = w.title;
-  $('p-en').textContent = w.en || '';
-  $('p-media').textContent = w.media || '';
-  $('p-desc').textContent = w.desc || '';
-  $('p-details').innerHTML = '';
-  (w.details || []).forEach(d => { const li = document.createElement('li'); li.textContent = d; $('p-details').appendChild(li); });
-  $('p-go').href = 'index.html#' + frame.userData.cat + (w.type ? '/' + w.type : '');
-  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false'); document.body.classList.add('panel-open');
-  if (frame.userData.col !== undefined){
-    const name = frame.userData.cat === 'nails' ? 'nails' : 'acc';
-    setWall(name); colIdx = colsFor(name).findIndex(v => Math.abs(v - frame.userData.col) < .05); updatePager();
-  } else setWall(null);
-  // fly camera in front of the frame
-  frame.getWorldPosition(tmpV);
-  frame.getWorldQuaternion(tmpQ);
-  tmpN.set(0, 0, 1).applyQuaternion(tmpQ).setY(0).normalize();
-  const dist = Math.max(frame.userData.h || 1.4, 1) * 1.55 + .6;
-  const pos = tmpV.clone().addScaledVector(tmpN, dist);
-  // when the panel covers the right side on desktop, shift the camera so the work sits left of center
-  if (innerWidth > 640){ const side = new THREE.Vector3().crossVectors(tmpN, new THREE.Vector3(0, 1, 0)).normalize(); pos.addScaledVector(side, -.45); tmpV.addScaledVector(side, -.45); }
-  else { pos.y += .35; tmpV.y -= .25; }
-  flyTo(pos.toArray(), tmpV.toArray(), 1.1);
-  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-pressed', 'false'));
-}
-function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); document.body.classList.remove('panel-open'); }
-$('close').addEventListener('click', closePanel);
-addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
-
-let hintTimer = setTimeout(hideHint, 9000);
+canvas.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') canvas.classList.toggle('hover', !!hit(e)); });
+let hintTimer = setTimeout(hideHint, 7000);
 function hideHint(){ $('hint').classList.add('off'); clearTimeout(hintTimer); }
-
-/* ---------- 閃光粒子 ---------- */
-const sparkGeo = new THREE.BufferGeometry();
-const SP = 140, sp = new Float32Array(SP * 3);
-const sr = rnd(42);
-for (let i = 0; i < SP; i++){ sp[i * 3] = (sr() - .5) * W * .9; sp[i * 3 + 1] = .4 + sr() * (H - .8); sp[i * 3 + 2] = (sr() - .5) * D * .9; }
-sparkGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-const sparkTex = canvasTex(64, 64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,248,230,1)'); gr.addColorStop(.25, 'rgba(255,230,190,.6)'); gr.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); });
-const sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({size: .07, map: sparkTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .7}));
-scene.add(sparks);
+controls.addEventListener('start', () => { tween = null; });
 
 /* ---------- 啟動 ---------- */
 function resize(){
   const w = innerWidth, h = innerHeight;
   renderer.setSize(w, h, false); camera.aspect = w / h;
-  camera.fov = w < 640 ? 62 : 50; camera.updateProjectionMatrix();
+  camera.fov = w < 640 ? 58 : 40; camera.updateProjectionMatrix();
 }
 addEventListener('resize', resize); resize();
 
-buildCounter();
-plant(-W / 2 + .7, -D / 2 + .7, 1.15); plant(W / 2 - .7, -D / 2 + .7, 1.15);
-plant(-W / 2 + .7, D / 2 - 1.2, .95); plant(W / 2 - .7, D / 2 - 1.2, .95);
-const tree = xmasTree(-3.05, -5.0, 1);
-
-const start = views.overview;
-camera.position.set(start.pos[0], start.pos[1] + 1.2, start.pos[2] + 3);
+const [sPos, sTgt] = fit(views.front), start = {pos: sPos, target: sTgt};
+camera.position.set(start.pos[0] + 4, start.pos[1] + 4, start.pos[2] + 6);
 controls.target.set(...start.target);
-
 let worksReady = false;
-loadWorks().then(data => { layoutWorks(data); worksReady = true; }).catch(err => { console.error(err); worksReady = true; });
-
+loadWorks().then(({nails, acc}) => {
+  const pick = [nails[nails.length - 1], nails[nails.length - 2], acc[acc.length - 1], acc[acc.length - 2]].filter(Boolean);
+  pick.forEach((w, i) => easels[i] && easelWork(easels[i], w));
+  worksReady = true;
+}).catch(err => { console.error(err); worksReady = true; });
 loadingManager.onLoad = () => {
   if (!worksReady) return;
   setTimeout(() => { $('loader').classList.add('done'); flyTo(start.pos, start.target, 2.2); }, 250);
 };
-// safety: never keep the loader forever
 setTimeout(() => { if (!$('loader').classList.contains('done')){ $('loader').classList.add('done'); flyTo(start.pos, start.target, 2); } }, 9000);
 
-const clock = new THREE.Clock();
-const _tc = new THREE.Color();
+const clock = new THREE.Clock(), _tc = new THREE.Color(), tagPos = new THREE.Vector3();
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 renderer.setAnimationLoop(() => {
-  const dt = clock.getDelta(), t = clock.elapsedTime;
+  const t = clock.getElapsedTime();
   if (tween){
     const k = Math.min((performance.now() - tween.s) / tween.d, 1), e = ease(k);
     camera.position.lerpVectors(tween.p0, tween.p1, e);
@@ -896,29 +746,27 @@ renderer.setAnimationLoop(() => {
     if (k >= 1) tween = null;
   }
   if (!reduce){
-    spinners.forEach((s, i) => { s.rotation.y = Math.sin(t * .45 + i * 1.7) * .55; });
     sparks.rotation.y = t * .01;
     sparks.material.opacity = .55 + Math.sin(t * 1.6) * .15;
-    const TL = tree.userData.lights;
-    const HC = tree.userData.halos.geometry.attributes.color;
+    const TL = tree.userData.lights, HC = tree.userData.halos.geometry.attributes.color;
     treeLights.forEach((o, i) => {
       const k = Math.pow(.5 + .5 * Math.sin(t * o.sp * 1.6 + o.ph), 3);
       TL.setColorAt(i, _tc.copy(TL.userData.base).multiplyScalar(.7 + k * 1.6));
       HC.setXYZ(i, .25 + k * 1.0, .2 + k * .82, .12 + k * .55);
     });
     TL.instanceColor.needsUpdate = true; HC.needsUpdate = true;
-    tree.userData.starGlow.material.opacity = .55 + .35 * Math.sin(t * 2.2);
-    tree.userData.starGlow.scale.setScalar(.8 + .12 * Math.sin(t * 2.2));
     tree.userData.star.rotation.y = Math.sin(t * .6) * .35;
+    tree.userData.starGlow.material.opacity = .55 + .35 * Math.sin(t * 2.2);
   }
-  // keep the orbit target inside the room
-  controls.target.x = THREE.MathUtils.clamp(controls.target.x, -W / 2 + .5, W / 2 - .5);
-  controls.target.z = THREE.MathUtils.clamp(controls.target.z, -D / 2 + .5, D / 2);
   controls.update();
-  // keep the camera inside the room walls (front is open)
-  camera.position.x = THREE.MathUtils.clamp(camera.position.x, -W / 2 + .4, W / 2 - .4);
-  camera.position.z = THREE.MathUtils.clamp(camera.position.z, -D / 2 + .4, 14);
-  camera.position.y = THREE.MathUtils.clamp(camera.position.y, .5, H - .3);
+  // 店門標籤跟著門走
+  tagPos.set(0, PY + BH + .95, FZ).project(camera);
+  const tag = $('doortag');
+  if (!entering && $('loader').classList.contains('done') && tagPos.z < 1){
+    tag.classList.remove('off');
+    tag.style.left = ((tagPos.x + 1) / 2 * innerWidth) + 'px';
+    tag.style.top = ((1 - tagPos.y) / 2 * innerHeight) + 'px';
+  }
   renderer.render(scene, camera);
 });
 </script>
