@@ -183,6 +183,8 @@ controls.enableDamping = true; controls.dampingFactor = .08;
 controls.minDistance = 2; controls.maxDistance = 42;
 controls.maxPolarAngle = Math.PI * .47; controls.minPolarAngle = Math.PI * .12;
 controls.enablePan = false; controls.rotateSpeed = .6;
+controls.autoRotateSpeed = .55;            // 店門口全景時慢慢自動旋轉
+let curView = 'front', idleUntil = 0;
 
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onProgress = (u, a, b) => { $('bar').style.width = (a / b * 100) + '%'; };
@@ -718,7 +720,7 @@ function fit(v){
   return [v.target.map((t, i) => t + (v.pos[i] - t) * k), v.target];
 }
 function setView(name){
-  closePanel();
+  closePanel(); curView = name; idleUntil = performance.now() + 2500;
   document.querySelectorAll('.nav button[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
   const [p, t] = fit(views[name]); flyTo(p, t);
 }
@@ -771,6 +773,7 @@ function openWork(obj){
   if (innerWidth > 640){ pos.x += .75; tgt.x += .75; } else { pos.z += .6; pos.y += .45; tgt.y -= .35; }
   flyTo(pos.toArray(), tgt.toArray(), 1.1);
   document.querySelectorAll('.nav button[data-view]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  curView = 'work';
 }
 function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); document.body.classList.remove('panel-open'); }
 $('close').addEventListener('click', closePanel);
@@ -780,7 +783,8 @@ addEventListener('keydown', e => { if (e.key === 'Escape'){ if ($('lightbox').cl
 canvas.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') canvas.classList.toggle('hover', !!hit(e)); });
 let hintTimer = setTimeout(hideHint, 7000);
 function hideHint(){ $('hint').classList.add('off'); clearTimeout(hintTimer); }
-controls.addEventListener('start', () => { tween = null; });
+controls.addEventListener('start', () => { tween = null; idleUntil = Infinity; });
+controls.addEventListener('end', () => { idleUntil = performance.now() + 5000; });
 
 /* ---------- 啟動 ---------- */
 function resize(){
@@ -828,6 +832,11 @@ renderer.setAnimationLoop(() => {
     tree.userData.star.rotation.y = Math.sin(t * .6) * .35;
     tree.userData.starGlow.material.opacity = .55 + .35 * Math.sin(t * 2.2);
   }
+  // 在正面左右來回慢慢擺動（不轉到店的背面）
+  const az = controls.getAzimuthalAngle();
+  if (az > .53 + .8) controls.autoRotateSpeed = Math.abs(controls.autoRotateSpeed);
+  else if (az < .53 - .8) controls.autoRotateSpeed = -Math.abs(controls.autoRotateSpeed);
+  controls.autoRotate = !reduce && curView === 'front' && !tween && !entering && performance.now() > idleUntil && $('loader').classList.contains('done') && !document.body.classList.contains('panel-open');
   controls.update();
   // 店門標籤跟著門走
   tagPos.set(0, PY + BH + .95, FZ).project(camera);
