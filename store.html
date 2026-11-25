@@ -54,6 +54,29 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
 .doortag{animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{margin-top:-6px}}
 .doortag.off{opacity:0;pointer-events:none}
+/* detail panel */
+.panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:var(--paper);border-left:1px solid var(--line);box-shadow:-20px 0 50px -30px rgba(70,62,54,.5);transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.9,.3,1);z-index:8;display:flex;flex-direction:column;overflow:auto}
+.panel.open{transform:none}
+.panel .ph{background:var(--pearl);padding:28px 28px 0}
+.panel .ph img{width:100%;display:block;border-radius:6px;box-shadow:0 14px 30px -18px rgba(70,62,54,.5)}
+.panel .bd{padding:24px 30px 34px}
+.panel .no{font-family:"Bodoni Moda",serif;font-size:13px;letter-spacing:.2em;color:var(--rose-deep)}
+.panel h2{font-family:"Noto Serif TC",serif;font-weight:700;font-size:26px;line-height:1.3;margin-top:8px}
+.panel .en{font-family:"Bodoni Moda",serif;font-style:italic;font-size:17px;color:var(--muted);margin-top:4px}
+.panel .media{font-size:13px;letter-spacing:.12em;color:var(--muted);margin-top:14px}
+.panel p{font-size:15px;line-height:1.9;margin-top:16px;color:#4a423c}
+.panel ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.panel li{font-size:13px;border:1px solid var(--line);background:var(--pearl);color:var(--rose-deep);padding:5px 12px;border-radius:999px}
+.panel .go{display:inline-block;margin-top:24px;font-size:14px;letter-spacing:.14em;color:#fff;background:var(--rose-deep);padding:11px 22px;border-radius:999px;text-decoration:none}
+.panel .x{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(254,253,251,.9);font-size:20px;line-height:1;color:var(--ink);cursor:pointer}
+
+.panel .ph img{cursor:zoom-in}
+.zoomhint{display:block;text-align:center;font-size:12px;letter-spacing:.14em;color:var(--muted);margin-top:10px}
+.lightbox{position:fixed;inset:0;z-index:30;background:rgba(30,26,22,.92);display:none;align-items:center;justify-content:center;cursor:zoom-out;touch-action:pinch-zoom}
+.lightbox.on{display:flex}
+.lightbox img{max-width:96vw;max-height:92vh;object-fit:contain;border-radius:4px;box-shadow:0 30px 80px -30px #000}
+.lightbox .x{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;font-size:24px;cursor:pointer}
+body.panel-open .doortag{opacity:0;pointer-events:none}
 .fade{position:fixed;inset:0;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .7s;z-index:15}
 .fade.on{opacity:1}
 .loader{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--bg);z-index:20;transition:opacity .8s}
@@ -75,6 +98,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
   .nav button{padding:8px 12px;font-size:13px}
   .nav button .en{display:none}
   .hint{bottom:70px;font-size:11px}
+  .panel{top:auto;bottom:0;height:auto;max-height:82vh;width:100%;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(105%)}
+  .panel .ph{padding:20px 20px 0;display:flex;flex-direction:column;align-items:center}
+  .panel .ph img{width:auto;max-width:100%;max-height:36vh}
+  .panel .bd{padding:18px 22px 28px}
+  .panel h2{font-size:22px}
 }
 @media (prefers-reduced-motion:reduce){.loader img,.doortag{animation:none}}
 </style>
@@ -91,7 +119,21 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font
   <button class="enter" id="enterBtn">走進展示店<span class="en">Step inside →</span></button>
 </nav>
 <a class="doortag off" id="doortag" href="showroom.html"><span>推開店門 進入展示店<em>Enter</em></span><i></i></a>
-<div class="hint" id="hint">拖曳轉動視角 · 滾輪或雙指縮放 · 點店門走進展示店</div>
+<div class="hint" id="hint">拖曳轉動視角 · 點櫥窗作品看介紹 · 點店門走進展示店</div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <button class="x" id="close" aria-label="關閉">×</button>
+  <div class="ph"><img id="p-img" alt="" title="點圖片放大"><span class="zoomhint">點圖片可放大 ⤢</span></div>
+  <div class="bd">
+    <div class="no" id="p-no"></div>
+    <h2 id="p-title"></h2>
+    <div class="en" id="p-en"></div>
+    <div class="media" id="p-media"></div>
+    <p id="p-desc"></p>
+    <ul id="p-details"></ul>
+    <a class="go" id="p-go" href="index.html">在作品集查看 →</a>
+  </div>
+</aside>
+<div class="lightbox" id="lightbox"><img id="lb-img" alt=""><button class="x" aria-label="關閉">×</button></div>
 <div class="fade" id="fade"></div>
 <div class="loader" id="loader"><img src="logo/main.png" alt="LuLu’s Handmade"><div class="bar"><i id="bar"></i></div><span>小店開門中</span></div>
 <div class="err" id="err">這個瀏覽器無法顯示 3D 店面。<br>請改用最新版 Chrome、Safari 或 Edge 開啟，<br>或 <a href="index.html">回作品集</a> 瀏覽作品。</div>
@@ -138,7 +180,7 @@ scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 120);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = .08;
-controls.minDistance = 5; controls.maxDistance = 42;
+controls.minDistance = 2; controls.maxDistance = 42;
 controls.maxPolarAngle = Math.PI * .47; controls.minPolarAngle = Math.PI * .12;
 controls.enablePan = false; controls.rotateSpeed = .6;
 
@@ -295,7 +337,6 @@ WIN.forEach((o, i) => {
     if (k % 3 === 0) add(new THREE.SphereGeometry(.05, 10, 8), new THREE.MeshStandardMaterial({color: ['#f3ddd4', '#fbf4ea', '#ecd2bf'][k % 3 === 0 ? (k / 3) % 3 : 0], roughness: .8}), b.position.x, b.position.y + .08, b.position.z + .03, g);
   }
   const hit = new THREE.Mesh(new THREE.PlaneGeometry(o.w, o.h + o.w / 2), new THREE.MeshBasicMaterial({visible: false}));
-  hit.position.set(o.x, o.y0 + (o.h + o.w / 2) / 2, FZ + .03); hit.userData.enter = true; g.add(hit); clickable.push(hit);
 });
 // 櫥窗上方的條紋遮陽棚（香檳金＋象牙白，荷葉邊）
 function awning(x, w, y, depth = .9){
@@ -357,15 +398,17 @@ WIN.forEach((o, i) => {
 // 門後的展示櫃剪影
 add(new RoundedBoxGeometry(2.4, .95, .6, 2, .05), M.white, 0, .48, FZ - 2.0, inside);
 add(new THREE.BoxGeometry(2.5, .05, .7), new THREE.MeshStandardMaterial({color: '#f6f2ec', roughness: .2}), 0, .98, FZ - 2.0, inside);
-function easelWork(e, work){
+function easelWork(e, work, cat){
   const w = .7, a = add(new THREE.CylinderGeometry(.012, .012, 1.0, 6), M.gold, 0, .5, -.08, e);
   a.rotation.x = .18;
   [-1, 1].forEach(d => { const l = add(new THREE.CylinderGeometry(.012, .012, 1.0, 6), M.gold, d * .2, .48, .05, e); l.rotation.z = d * .12; });
   const frame = add(new THREE.BoxGeometry(w + .08, w * 1.25 + .08, .04), M.gold, 0, .72, .06, e);
+  frame.userData.work = work; frame.userData.cat = cat; clickable.push(frame);
   const mat = add(new THREE.PlaneGeometry(w, w * 1.25), new THREE.MeshStandardMaterial({color: '#fefcf8', roughness: .9}), 0, .72, .085, e, {cast: false});
   tex(work.file, t => {
     const ar = t.image.width / t.image.height; let pw = w - .1, ph = pw / ar; if (ph > w * 1.25 - .1){ ph = w * 1.25 - .1; pw = ph * ar; }
-    add(new THREE.PlaneGeometry(pw, ph), new THREE.MeshStandardMaterial({map: t, roughness: .6, emissive: '#ffffff', emissiveMap: t, emissiveIntensity: .12}), 0, .72, .09, e, {cast: false});
+    const ph2 = add(new THREE.PlaneGeometry(pw, ph), new THREE.MeshBasicMaterial({map: t, toneMapped: false}), 0, .72, .09, e, {cast: false});
+    ph2.userData.work = work; ph2.userData.cat = cat; clickable.push(ph2);
   });
   e.rotation.x = -.06;
 }
@@ -675,13 +718,14 @@ function fit(v){
   return [v.target.map((t, i) => t + (v.pos[i] - t) * k), v.target];
 }
 function setView(name){
+  closePanel();
   document.querySelectorAll('.nav button[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === name));
   const [p, t] = fit(views[name]); flyTo(p, t);
 }
 document.querySelectorAll('.nav button[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
 let entering = false;
 function enterShop(){
-  if (entering) return; entering = true;
+  if (entering) return; entering = true; closePanel();
   $('doortag').classList.add('off');
   const v = views.door; flyTo(v.pos, v.target, 1.5);
   setTimeout(() => $('fade').classList.add('on'), 1000);
@@ -704,8 +748,35 @@ function hit(e){
 canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; hideHint(); });
 canvas.addEventListener('pointerup', e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
-  if (hit(e)) enterShop();
+  const h = hit(e); if (!h) return;
+  if (h.object.userData.work) openWork(h.object);
+  else if (h.object.userData.enter) enterShop();
 });
+const tmpV = new THREE.Vector3();
+function openWork(obj){
+  const w = obj.userData.work;
+  $('p-img').src = w.file; $('p-img').alt = w.title; $('lb-img').src = w.file; $('lb-img').alt = w.title;
+  $('p-no').textContent = 'NO.' + w.no;
+  $('p-title').textContent = w.title;
+  $('p-en').textContent = w.en || '';
+  $('p-media').textContent = w.media || '';
+  $('p-desc').textContent = w.desc || '';
+  $('p-details').innerHTML = '';
+  (w.details || []).forEach(d => { const li = document.createElement('li'); li.textContent = d; $('p-details').appendChild(li); });
+  $('p-go').href = 'index.html#' + obj.userData.cat + (w.type ? '/' + w.type : '');
+  $('panel').classList.add('open'); $('panel').setAttribute('aria-hidden', 'false'); document.body.classList.add('panel-open');
+  // 鏡頭靠近櫥窗裡的這件作品
+  obj.getWorldPosition(tmpV);
+  const tgt = tmpV.clone(), pos = tmpV.clone().add(new THREE.Vector3(0, .1, 3.1));
+  if (innerWidth > 640){ pos.x += .75; tgt.x += .75; } else { pos.z += .6; pos.y += .45; tgt.y -= .35; }
+  flyTo(pos.toArray(), tgt.toArray(), 1.1);
+  document.querySelectorAll('.nav button[data-view]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+}
+function closePanel(){ $('panel').classList.remove('open'); $('panel').setAttribute('aria-hidden', 'true'); document.body.classList.remove('panel-open'); }
+$('close').addEventListener('click', closePanel);
+$('p-img').addEventListener('click', () => $('lightbox').classList.add('on'));
+$('lightbox').addEventListener('click', () => $('lightbox').classList.remove('on'));
+addEventListener('keydown', e => { if (e.key === 'Escape'){ if ($('lightbox').classList.contains('on')) $('lightbox').classList.remove('on'); else closePanel(); } });
 canvas.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') canvas.classList.toggle('hover', !!hit(e)); });
 let hintTimer = setTimeout(hideHint, 7000);
 function hideHint(){ $('hint').classList.add('off'); clearTimeout(hintTimer); }
@@ -724,8 +795,8 @@ camera.position.set(start.pos[0] + 4, start.pos[1] + 4, start.pos[2] + 6);
 controls.target.set(...start.target);
 let worksReady = false;
 loadWorks().then(({nails, acc}) => {
-  const pick = [nails[nails.length - 1], nails[nails.length - 2], acc[acc.length - 1], acc[acc.length - 2]].filter(Boolean);
-  pick.forEach((w, i) => easels[i] && easelWork(easels[i], w));
+  const pick = [nails[nails.length - 1], nails[nails.length - 2], acc[acc.length - 1], acc[acc.length - 2]];
+  pick.forEach((w, i) => easels[i] && easelWork(easels[i], w, i < 2 ? 'nails' : 'accessories'));
   worksReady = true;
 }).catch(err => { console.error(err); worksReady = true; });
 loadingManager.onLoad = () => {
