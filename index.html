@@ -339,7 +339,7 @@ h1 small{animation:sub-in 1s ease 1s both}
 .tab[aria-selected="true"] .t-n{background:rgba(255,255,255,.25);color:#fff}
 .tab:focus-visible{outline:2px solid var(--rose-deep);outline-offset:2px}
 .tab-ink{position:absolute;z-index:0;top:6px;bottom:6px;left:6px;width:calc(50% - 9px);border-radius:999px;background:linear-gradient(120deg,var(--rose-deep),#b5a184 60%,#c6b498);box-shadow:0 8px 20px -10px rgba(122,102,82,.8);transition:transform .45s cubic-bezier(.3,1.3,.5,1)}
-.tabs[data-cat="accessories"] .tab-ink{transform:translateX(calc(100% + 6px))}
+.tabs[data-cat="nails"] .tab-ink{transform:translateX(calc(100% + 6px))}
 #panel{transition:opacity .35s ease,transform .35s ease}
 #panel.switching{opacity:0;transform:translateY(12px)}
 #panel .meta{margin-top:22px}
@@ -411,11 +411,11 @@ h1 small{animation:sub-in 1s ease 1s both}
   </header>
 
   <nav class="tabs reveal" id="tabs" role="tablist" aria-label="作品分類">
-    <button class="tab" role="tab" id="tab-nails" data-cat="nails" aria-controls="panel">
-      <span class="t-zh">美甲片</span><span class="t-en">Press-on Nails</span><span class="t-n" id="n-nails"></span>
-    </button>
     <button class="tab" role="tab" id="tab-accessories" data-cat="accessories" aria-controls="panel">
       <span class="t-zh">飾品創作</span><span class="t-en">Accessories</span><span class="t-n" id="n-accessories"></span>
+    </button>
+    <button class="tab" role="tab" id="tab-nails" data-cat="nails" aria-controls="panel">
+      <span class="t-zh">美甲片</span><span class="t-en">Press-on Nails</span><span class="t-n" id="n-nails"></span>
     </button>
     <span class="tab-ink" aria-hidden="true"></span>
   </nav>
@@ -554,11 +554,11 @@ const CATS = {
 };
 
 const $ = s => document.querySelector(s);
-let cat = location.hash.startsWith('#accessories') ? 'accessories' : 'nails';
+let cat = location.hash.startsWith('#nails') ? 'nails' : 'accessories';
 let sorted = [], latest = null;
 // 飾品子分類：新增作品時在 ACCESSORIES 每筆填 type（necklace／earring／bracelet…），這裡加上對應名稱即可
 const SUBS = { necklace: ['項鍊', 'Necklaces'], earring: ['耳環', 'Earrings'], bracelet: ['手鍊', 'Bracelets'], ring: ['戒指', 'Rings'] };
-const parseHash = () => { const [c, s] = location.hash.slice(1).split('/'); return { c: c === 'accessories' ? 'accessories' : 'nails', s: (c === 'accessories' && SUBS[s]) ? s : 'all' }; };
+const parseHash = () => { const [c, s] = location.hash.slice(1).split('/'); return { c: c === 'nails' ? 'nails' : 'accessories', s: (c === 'accessories' && SUBS[s]) ? s : 'all' }; };
 let sub = parseHash().s;
 $('#n-nails').textContent = NAILS.length;
 $('#n-accessories').textContent = ACCESSORIES.length;

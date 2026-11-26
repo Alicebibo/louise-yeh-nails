@@ -799,8 +799,9 @@ camera.position.set(start.pos[0] + 4, start.pos[1] + 4, start.pos[2] + 6);
 controls.target.set(...start.target);
 let worksReady = false;
 loadWorks().then(({nails, acc}) => {
-  const pick = [nails[nails.length - 1], nails[nails.length - 2], acc[acc.length - 1], acc[acc.length - 2]];
-  pick.forEach((w, i) => easels[i] && easelWork(easels[i], w, i < 2 ? 'nails' : 'accessories'));
+  // 左櫥窗（「櫥窗」視角預設看的那一側）放飾品，右櫥窗放美甲片
+  const pick = [acc[acc.length - 1], acc[acc.length - 2], nails[nails.length - 1], nails[nails.length - 2]];
+  pick.forEach((w, i) => easels[i] && easelWork(easels[i], w, i < 2 ? 'accessories' : 'nails'));
   worksReady = true;
 }).catch(err => { console.error(err); worksReady = true; });
 loadingManager.onLoad = () => {
