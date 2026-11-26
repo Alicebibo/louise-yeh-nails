@@ -461,8 +461,8 @@ const board = new THREE.Group(); board.position.set(2.6, PY, 3.9); board.rotatio
 let setBoardWork = () => {};
 {
   const BW2 = 1.0, BH2 = 1.43, CY = .8;
-  [[1, .16], [-1, -.16]].forEach(([d, rx]) => { const p = add(new THREE.BoxGeometry(BW2 + .06, BH2 + .08, .05), M.white, 0, CY, d * .17, board); p.rotation.x = rx; });
-  const bf = add(new THREE.BoxGeometry(BW2 + .1, BH2 + .12, .02), M.gold, 0, CY, .19, board); bf.rotation.x = .16;
+  [[1, -.2], [-1, .2]].forEach(([d, rx]) => { const p = add(new THREE.BoxGeometry(BW2 + .06, BH2 + .08, .05), M.white, 0, CY, d * .17, board); p.rotation.x = rx; });
+  const bf = add(new THREE.BoxGeometry(BW2 + .1, BH2 + .12, .02), M.gold, 0, CY, .19, board); bf.rotation.x = -.2;
   const CW = 1008, CH = 1440;
   let work = null, img = null;
   const fitText = (g, txt, max, size, weight, fam) => { let s2 = size; do { g.font = `${weight} ${s2}px ${fam}`; s2 -= 2; } while (g.measureText(txt).width > max && s2 > 20); };
@@ -497,7 +497,7 @@ let setBoardWork = () => {};
   const redraw = () => { draw(t.image.getContext('2d'), CW, CH); t.needsUpdate = true; };
   document.fonts.ready.then(redraw);
   const face = add(new THREE.PlaneGeometry(BW2 - .04, BH2 - .04), new THREE.MeshBasicMaterial({map: t, color: '#f3eee7', toneMapped: false}), 0, CY, .205, board, {cast: false});
-  face.rotation.x = .16; board.userData.face = face;
+  face.rotation.x = -.2; board.userData.face = face;
   setBoardWork = (w2, cat) => {
     work = w2; face.userData.work = w2; face.userData.cat = cat; clickable.push(face);
     const im = new Image(); im.onload = () => { img = im; document.fonts.ready.then(redraw); }; im.src = w2.file;
