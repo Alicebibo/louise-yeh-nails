@@ -456,24 +456,53 @@ lamp(-6.7, 2.4);
   const bag = add(new RoundedBoxGeometry(.32, .36, .16, 2, .02), new THREE.MeshStandardMaterial({color: '#ecd3ca', roughness: .7}), .35, .66, -.08, g);
   const h = add(new THREE.TorusGeometry(.08, .012, 6, 20, Math.PI), M.gold, .35, .84, -.08, g);
 }
-// 立牌：新品上架
-const board = new THREE.Group(); board.position.set(2.6, PY, 3.9); board.rotation.y = -.35; room.add(board);
+// 立牌：新作上架（放最新一件作品的照片，點了可看作品）
+const board = new THREE.Group(); board.position.set(2.6, PY, 3.9); board.rotation.y = .4; room.add(board);
+let setBoardWork = () => {};
 {
-  const leg = new THREE.MeshStandardMaterial({color: '#c9a882', roughness: .6});
-  [[1, .18], [-1, -.18]].forEach(([d, rx]) => { const p = add(new THREE.BoxGeometry(.9, 1.3, .05), M.white, 0, .66, d * .16, board); p.rotation.x = rx; });
-  const bf = add(new THREE.BoxGeometry(.94, 1.34, .02), M.gold, 0, .66, .18, board); bf.rotation.x = .18;
-  const drawBoard = (g, w, h) => {
-    g.fillStyle = '#fefcf8'; g.fillRect(0, 0, w, h);
-    g.strokeStyle = '#c9ab7a'; g.lineWidth = 4; g.strokeRect(22, 22, w - 44, h - 44);
-    g.fillStyle = '#a8895c'; g.font = 'italic 46px "Bodoni Moda", serif'; g.textAlign = 'center'; g.fillText('New Arrivals', w / 2, 100);
-    g.fillStyle = '#4e3f33'; g.font = '700 54px "Noto Serif TC", serif'; g.fillText('新作上架', w / 2, 176);
-    g.fillStyle = '#c9ab7a'; g.fillRect(w / 2 - 60, 204, 120, 2);
-    g.fillStyle = '#7a6652'; g.font = '30px "Noto Sans TC", sans-serif'; g.fillText('手作美甲片 · 飾品', w / 2, 640);
+  const BW2 = 1.0, BH2 = 1.43, CY = .8;
+  [[1, .16], [-1, -.16]].forEach(([d, rx]) => { const p = add(new THREE.BoxGeometry(BW2 + .06, BH2 + .08, .05), M.white, 0, CY, d * .17, board); p.rotation.x = rx; });
+  const bf = add(new THREE.BoxGeometry(BW2 + .1, BH2 + .12, .02), M.gold, 0, CY, .19, board); bf.rotation.x = .16;
+  const CW = 1008, CH = 1440;
+  let work = null, img = null;
+  const fitText = (g, txt, max, size, weight, fam) => { let s2 = size; do { g.font = `${weight} ${s2}px ${fam}`; s2 -= 2; } while (g.measureText(txt).width > max && s2 > 20); };
+  const rr = (g, x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+  const draw = (g, w, h) => {
+    const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#fffdf9'); bg.addColorStop(1, '#f6efe4');
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#c9ab7a'; g.lineWidth = 6; g.strokeRect(34, 34, w - 68, h - 68);
+    g.lineWidth = 2; g.strokeRect(50, 50, w - 100, h - 100);
+    g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+    g.fillStyle = '#a8895c'; g.font = 'italic 64px "Bodoni Moda", serif'; g.fillText('New Arrivals', w / 2, 150);
+    g.fillStyle = '#3f3229'; g.font = '700 92px "Noto Serif TC", serif'; g.fillText('新作上架', w / 2, 262);
+    g.fillStyle = '#c9ab7a'; g.fillRect(w / 2 - 90, 296, 180, 3);
+    // 照片
+    const px = 110, py = 336, pw = w - 220, ph = 690;
+    g.save(); g.shadowColor = 'rgba(80,60,40,.28)'; g.shadowBlur = 30; g.shadowOffsetY = 10; g.fillStyle = '#fff'; rr(g, px - 16, py - 16, pw + 32, ph + 32, 18); g.fill(); g.restore();
+    g.save(); rr(g, px, py, pw, ph, 10); g.clip();
+    if (img){ const ar = img.width / img.height, br = pw / ph; let sw, sh, sx, sy;
+      if (ar > br){ sh = img.height; sw = sh * br; sx = (img.width - sw) / 2; sy = 0; } else { sw = img.width; sh = sw / br; sx = 0; sy = (img.height - sh) / 2; }
+      g.drawImage(img, sx, sy, sw, sh, px, py, pw, ph);
+    } else { g.fillStyle = '#efe6d8'; g.fillRect(px, py, pw, ph); }
+    g.restore();
+    if (work){
+      g.fillStyle = '#a8895c'; g.font = '600 34px "IBM Plex Mono", monospace'; g.fillText('NO.' + work.no + '  ·  NEW', w / 2, 1118);
+      g.fillStyle = '#3f3229'; fitText(g, work.title, w - 180, 58, 700, '"Noto Serif TC", serif'); g.fillText(work.title, w / 2, 1194);
+      if (work.en){ g.fillStyle = '#8a7560'; fitText(g, work.en, w - 200, 40, 'italic', '"Bodoni Moda", serif'); g.fillText(work.en, w / 2, 1252); }
+    }
+    g.fillStyle = '#b08f62'; rr(g, w / 2 - 190, 1296, 380, 74, 37); g.fill();
+    g.fillStyle = '#fff'; g.font = '600 36px "Noto Sans TC", sans-serif'; g.fillText('點我看作品 →', w / 2, 1346);
   };
-  const t = canvasTex(512, 720, drawBoard);
-  document.fonts.ready.then(() => { const c = t.image; drawBoard(c.getContext('2d'), c.width, c.height); t.needsUpdate = true; });
-  const face = add(new THREE.PlaneGeometry(.84, 1.2), new THREE.MeshStandardMaterial({map: t, roughness: .8}), 0, .66, .195, board, {cast: false});
-  face.rotation.x = .18; board.userData.face = face;
+  const t = canvasTex(CW, CH, draw);
+  const redraw = () => { draw(t.image.getContext('2d'), CW, CH); t.needsUpdate = true; };
+  document.fonts.ready.then(redraw);
+  const face = add(new THREE.PlaneGeometry(BW2 - .04, BH2 - .04), new THREE.MeshBasicMaterial({map: t, color: '#f3eee7', toneMapped: false}), 0, CY, .205, board, {cast: false});
+  face.rotation.x = .16; board.userData.face = face;
+  setBoardWork = (w2, cat) => {
+    work = w2; face.userData.work = w2; face.userData.cat = cat; clickable.push(face);
+    const im = new Image(); im.onload = () => { img = im; document.fonts.ready.then(redraw); }; im.src = w2.file;
+    redraw();
+  };
 }
 // 花盆小樹叢
 function shrub(x, z, s = 1){
@@ -802,6 +831,7 @@ loadWorks().then(({nails, acc}) => {
   // 左櫥窗（「櫥窗」視角預設看的那一側）放飾品，右櫥窗放美甲片
   const pick = [acc[acc.length - 1], acc[acc.length - 2], nails[nails.length - 1], nails[nails.length - 2]];
   pick.forEach((w, i) => easels[i] && easelWork(easels[i], w, i < 2 ? 'accessories' : 'nails'));
+  if (acc.length) setBoardWork(acc[acc.length - 1], 'accessories');
   worksReady = true;
 }).catch(err => { console.error(err); worksReady = true; });
 loadingManager.onLoad = () => {
